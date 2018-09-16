@@ -193,7 +193,7 @@ An example source file, demonstrating the correct commenting and spacing for the
 Names should be as descriptive as possible, within reason. Follow standard
 [Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
-命名需要自答意（即看到命名，即可清楚知道代表的意义）且合理，参照[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
+命名需要自达意（即看到命名，即可清楚知道代表的意义）且合理，参照[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
 Avoid non-standard abbreviations (including non-standard acronyms and
 initialisms). Don't worry about saving horizontal space as it is far more
@@ -227,47 +227,64 @@ p = [network port];
 ```
 
 Any class, category, method, function, or variable name should use all capitals
-for acronyms and
-[initialisms](https://en.wikipedia.org/wiki/Initialism)
+for acronyms and [initialisms](https://en.wikipedia.org/wiki/Initialism)
 within the name. This follows Apple's standard of using all capitals within a
 name for acronyms such as URL, ID, TIFF, and EXIF.
+
+任何类、扩展、方法、函数或者变量名，简称或者缩略语必须大写。对于名字，可参照苹果缩略语或简称大写字母标准，例如URL, ID, TIFF, EXIF。
 
 Names of C functions and typedefs should be capitalized and use camel case as
 appropriate for the surrounding code.
 
-### File Names 
+C语言函数或者typedef命名须首字母大写，使用驼峰命名方式区分大小写；
+
+### 文件命名（File Names）
 
 File names should reflect the name of the class implementation that they
 contain—including case.
 
+文件命名须与该文件中实现的类名保持一致，包括大小写；
+
 Follow the convention that your project uses.
 File extensions should be as follows:
 
-Extension | Type
+文件扩展名，约定如下：
+
+扩展名（Extension） | 类型（Type） 
 --------- | ---------------------------------
-.h        | C/C++/Objective-C header file
-.m        | Objective-C implementation file
-.mm       | Objective-C++ implementation file
-.cc       | Pure C++ implementation file
-.c        | C implementation file
+.h        | C/C++/Objective-C头文件（C/C++/Objective-C header file） 
+.m        | Objective-C（类）实现文件（Objective-C implementation file） 
+.mm       | Objective-C++（类）实现文件（Objective-C++ implementation file） 
+.cc       | 纯C++实现文件（Pure C++ implementation file） 
+.c        | C实现文件（C implementation file） 
 
 Files containing code that may be shared across projects or used in a large
 project should have a clearly unique name, typically including the project or
 class [prefix](#prefixes).
 
+包含跨工程或者较大工程中共用的代码的文件，必须有一个清晰唯一的名字，一般包括工程或者类名作为前缀。
+
 File names for categories should include the name of the class being extended,
 like GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
 
-### Prefixes
+扩展类的文件名，须包含被扩展类的类名，例如GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
+
+
+
+### 前缀（Prefixes）
 
 Prefixes are commonly required in Objective-C to avoid naming collisions in a
 global namespace. Classes, protocols, global functions, and global constants
 should generally be named with a prefix that begins with a capital letter
 followed by one or more capital letters or numbers.
 
+前缀被用来避免全局命名空间的命名冲突。类名、协议、全局方法和全局常量命名，要添加前缀，并且首字母大写，后面包含一个或几个数字或大写字母。
+
 WARNING: Apple reserves two-letter prefixes—see
 [Conventions in Programming with Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html)—so
 prefixes with a minimum of three characters are considered best practice.
+
+警告：苹果使用两个字母的前缀，参考[Conventions in Programming with Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html)，所以，建议最好使用最少三个字符的前缀。
 
 ```objectivec 
 // GOOD:
@@ -288,10 +305,12 @@ extern NSTimeZone *GTMGetDefaultTimeZone(void);
 
 ```
 
-### Class Names 
+### 类命名（Class Names）
 
 Class names (along with category and protocol names) should start as uppercase
 and use mixed case to delimit words.
+
+类命名（连同扩展和协议命名）需要使用首字母大写，大小写混合的方式来界定不同单词。
 
 Classes and protocols in code shared across multiple applications must have an
 appropriate [prefix](#prefixes) (e.g. GTMSendMessage). Prefixes are recommended,
