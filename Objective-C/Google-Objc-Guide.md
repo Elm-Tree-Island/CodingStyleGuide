@@ -316,20 +316,28 @@ Classes and protocols in code shared across multiple applications must have an
 appropriate [prefix](#prefixes) (e.g. GTMSendMessage). Prefixes are recommended,
 but not required, for other classes and protocols.
 
-### Category Naming 
+跨应用使用的类和协议必须使用合适的前缀（例如：GTMSendMessage）。对于其他类和协议，前缀被推荐使用，但不是必须的。
 
-Category names should start with an appropriate [prefix](#prefixes) identifying
-the category as part of a project or open for general use.
+### Category命名（Category Naming ）
 
-Category source file names should begin with the class being extended followed
-by a plus sign and the name of the category, e.g., `NSString+GTMParsing.h`.
-Methods in a category should be prefixed with a lowercase version of the prefix
-used for the category name followed by an underscore (e.g.,
-`gtm_myCategoryMethodOnAString:`) in order to prevent collisions in
-Objective-C's global namespace.
+> Category names should start with an appropriate [prefix](#prefixes) identifying
+> the category as part of a project or open for general use.
 
-There should be a single space between the class name and the opening
-parenthesis of the category.
+Category名要使用合适的前缀，来表明该扩展是某一工程的一部分或可以通用。
+
+> Category source file names should begin with the class being extended followed
+> by a plus sign and the name of the category, e.g., `NSString+GTMParsing.h`.
+> Methods in a category should be prefixed with a lowercase version of the prefix
+> used for the category name followed by an underscore (e.g.,
+> `gtm_myCategoryMethodOnAString:`) in order to prevent collisions in
+> Objective-C's global namespace.
+
+Category源文件名必须以被扩展类名开头，中间用+号衔接后面的扩展名字，例如：`NSString+GTMParsing.h`。 扩展中的方法以小写的扩展名为前缀，中间用下划线衔接方法名（例如：`gtm_myCategoryMethodOnAString:`），以便避免全局命名范围内的命名冲突。
+
+> There should be a single space between the class name and the opening
+> parenthesis of the category.
+
+类名和扩展名的左圆括号之间，须添加一个空格。
 
 ```objectivec 
 // GOOD:
@@ -348,8 +356,10 @@ parenthesis of the category.
 @end
 ```
 
-If a class is not shared with other projects, categories extending it may omit
-name prefixes and method name prefixes.
+> If a class is not shared with other projects, categories extending it may omit
+> name prefixes and method name prefixes.
+
+若类不被其他工程共用，扩展名和方法名可省略前缀。
 
 ```objectivec 
 // GOOD:
