@@ -370,11 +370,15 @@ Category源文件名必须以被扩展类名开头，中间用+号衔接后面�
 @end
 ```
 
-### Objective-C Method Names 
+### OC方法命名（Objective-C Method Names）
 
-Method and parameter names typically start as lowercase and then use mixed case.
+> Method and parameter names typically start as lowercase and then use mixed case.
 
-Proper capitalization should be respected, including at the beginning of names.
+方法名和参数名以小写字母开头，中间夹杂大小写。
+
+> Proper capitalization should be respected, including at the beginning of names.
+
+包括首字母命名，可以考虑某些字母大写。
 
 ```objectivec 
 // GOOD:
@@ -382,14 +386,18 @@ Proper capitalization should be respected, including at the beginning of names.
 + (NSURL *)URLWithString:(NSString *)URLString;
 ```
 
-The method name should read like a sentence if possible, meaning you should
-choose parameter names that flow with the method name. Objective-C method names
-tend to be very long, but this has the benefit that a block of code can almost
-read like prose, thus rendering many implementation comments unnecessary.
+> The method name should read like a sentence if possible, meaning you should
+> choose parameter names that flow with the method name. Objective-C method names
+> tend to be very long, but this has the benefit that a block of code can almost
+> read like prose, thus rendering many implementation comments unnecessary.
 
-Use prepositions and conjunctions like "with", "from", and "to" in the second
-and later parameter names only where necessary to clarify the meaning or
-behavior of the method.
+方法名应该尽量读起来像一个句子，告诉你这个方法后面应该传入的参数名。Objective-C方法名倾向于非常长，但是这样的好处就是一段block的代码读起来像散文，因此没必要再添加更多注释。
+
+> Use prepositions and conjunctions like "with", "from", and "to" in the second
+> and later parameter names only where necessary to clarify the meaning or
+> behavior of the method.
+
+只有在有必要说明方法意义或行为时，才在第二个参数名后，使用例如"with", "from", and "to"等介词和连词。
 
 ```objectivec 
 // GOOD:
@@ -400,8 +408,10 @@ behavior of the method.
             withAttributedString:(NSAttributedString *)attributedString;  // GOOD.
 ```
 
-A method that returns an object should have a name beginning with a noun
-identifying the object returned:
+> A method that returns an object should have a name beginning with a noun
+> identifying the object returned:
+
+返回对象的方法名需要以名词开头，以表明返回的对象类型。
 
 ```objectivec 
 // GOOD:
@@ -415,8 +425,12 @@ identifying the object returned:
 - (Sandwich *)makeSandwich;  // AVOID.
 ```
 
-An accessor method should be named the same as the object it's getting, but it
-should not be prefixed with the word `get`. For example:
+
+
+> An accessor method should be named the same as the object it's getting, but it
+> should not be prefixed with the word `get`. For example:
+
+访问器方法需要和对象的getting方法一致，但不可有`get`前缀。例如：
 
 ```objectivec 
 // GOOD:
@@ -430,10 +444,16 @@ should not be prefixed with the word `get`. For example:
 - (id)getDelegate;  // AVOID.
 ```
 
-Accessors that return the value of boolean adjectives have method names
-beginning with `is`, but property names for those methods omit the `is`.
 
-Dot notation is used only with property names, not with method names.
+
+> Accessors that return the value of boolean adjectives have method names
+> beginning with `is`, but property names for those methods omit the `is`.
+
+返回布尔类型的方法，要以`is`为开头，但属性名省略`is`
+
+> Dot notation is used only with property names, not with method names.
+
+点只用于属性获取，不可用于方法调用
 
 ```objectivec 
 // GOOD:
@@ -459,17 +479,19 @@ NSEnumerator *enumerator = [frogs reverseObjectEnumerator];  // GOOD.
 ```
 
 ```objectivec 
-// AVOID:
+// AVOID: 避免使用.来调用方法
 
 NSEnumerator *enumerator = frogs.reverseObjectEnumerator;    // AVOID.
 ```
 
-See [Apple's Guide to Naming
-Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF)
-for more details on Objective-C naming.
+See [Apple's Guide to Naming Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF) for more details on Objective-C naming.
 
 These guidelines are for Objective-C methods only. C++ method names continue to
 follow the rules set in the C++ style guide.
+
+更多命名相关内容，参考[Apple's Guide to Naming Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF)。
+
+以上规范只适用于Objective-C方法，C++方法命名请参考C++命名指南。
 
 ### Function Names 
 
