@@ -42,7 +42,7 @@ codebase rather than the ease of writing said code. For example, when something
 surprising or unusual is happening in a snippet of code, leaving textual hints
 for the reader is valuable.
 
-阅读代码库中的代码的时间往往远大于书写的时间。我们很明确的选择优化普通软件开发工程师对于代码阅读、维护和调试的体验，而不是写出简易（指简陋甚至）的代码。例如，当对于一小段代码会让人感到惊奇或不寻常时，给读者书写一段文本注释或说明是非常可贵的。
+阅读代码库中的代码的时间往往远大于书写的时间。我们很明确的选择优化普通软件开发工程师对于代码阅读、维护和调试的体验，而不是写出简易（指简陋甚至）的代码。例如，当对于一小段代码会让人感到惊奇或不寻常时（不可奇技淫巧），给读者书写一段文本注释或说明是非常可贵的。
 
 ### 保持一致性 （Be consistent）
 
@@ -493,11 +493,12 @@ follow the rules set in the C++ style guide.
 
 以上规范只适用于Objective-C方法，C++方法命名请参考C++命名指南。
 
-### Function Names 
+### 函数命名（Function Names）
 
 Function names should start with a capital letter and have a capital letter for
-each new word (a.k.a. "[camel case](https://en.wikipedia.org/wiki/Camel_case)"
-or "Pascal case").
+each new word (a.k.a. "[camel case](https://en.wikipedia.org/wiki/Camel_case)" or "Pascal case").
+
+函数名要首字母大写，之后使用驼峰命名法。
 
 ```objectivec 
 // GOOD:
@@ -509,6 +510,8 @@ static BOOL DeleteFile(const char *filename);
 Because Objective-C does not provide namespacing, non-static functions should
 have a [prefix](#prefixes) that minimizes the chance of a name collision.
 
+由于Objective-C不支持命名空间，非静态函数要使用前缀，以最大程度减少命名冲突。
+
 ```objectivec 
 // GOOD:
 
@@ -516,23 +519,31 @@ extern NSTimeZone *GTMGetDefaultTimeZone(void);
 extern NSString *GTMGetURLScheme(NSURL *URL);
 ```
 
-### Variable Names 
+### 变量命名（Variable Names）
 
-Variable names typically start with a lowercase and use mixed case to delimit
-words.
+> Variable names typically start with a lowercase and use mixed case to delimit
+> words.
 
-Instance variables have leading underscores. File scope or global variables have
-a prefix `g`. For example: `myLocalVariable`, `_myInstanceVariable`,
-`gMyGlobalVariable`.
+> Instance variables have leading underscores. File scope or global variables have
+> a prefix `g`. For example: `myLocalVariable`, `_myInstanceVariable`,
+> `gMyGlobalVariable`.
 
-#### Common Variable Names 
+变量名首字母小写，采用驼峰命名法.
 
-Readers should be able to infer the variable type from the name, but do not use
-Hungarian notation for syntactic attributes, such as the static type of a
-variable (int or pointer).
+实例变量使用下划线前缀。文件范围或全局变量使用`g`作为前缀。例如`myLocalVariable`, `_myInstanceVariable`, `gMyGlobalVariable`.
 
-File scope or global variables (as opposed to constants) declared outside the
-scope of a method or function should be rare, and should have the prefix g.
+#### 一般变量命名（Common Variable Names）
+
+> Readers should be able to infer the variable type from the name, but do not use
+> Hungarian notation for syntactic attributes, such as the static type of a
+> variable (int or pointer).
+
+代码读者应该能从命名中推导出变量所代表的含义，但是对于句法属性不要使用匈牙利表示法，例如，对于静态变量，不需要加`s`
+
+> File scope or global variables (as opposed to constants) declared outside the
+> scope of a method or function should be rare, and should have the prefix g.
+
+声明在方法或函数外的文件作用域变量或全局变量（区别常量）比较少见，应该带有一个前缀`g`
 
 ```objectivec 
 // GOOD:
@@ -540,23 +551,31 @@ scope of a method or function should be rare, and should have the prefix g.
 static int gGlobalCounter;
 ```
 
-#### Instance Variables 
+#### 实例变量（Instance Variables）
 
-Instance variable names are mixed case and should be prefixed with an
-underscore, like `_usernameTextField`.
+> Instance variable names are mixed case and should be prefixed with an
+> underscore, like `_usernameTextField`.
 
-NOTE: Google's previous convention for Objective-C ivars was a trailing
-underscore. Existing projects may opt to continue using trailing underscores in
-new code in order to maintain consistency within the project codebase.
-Consistency of prefix or suffix underscores should be maintained within each
-class.
+示例变量前边以下划线`_`开头，中间但是使用驼峰法区分大小写。
 
-#### Constants 
+> NOTE: Google's previous convention for Objective-C ivars was a trailing
+> underscore. Existing projects may opt to continue using trailing underscores in
+> new code in order to maintain consistency within the project codebase.
+> Consistency of prefix or suffix underscores should be maintained within each
+> class.
 
-Constant symbols (const global and static variables and constants created
-with #define) should use mixed case to delimit words.
+提示：Google之前对Objective-C变量的约定是使用尾部下划线。现有工程中，后续开发可能会选择继续使用实例变量尾部带有下划线的方式，以便与之前工程代码保持一致。在每个类中要保持前后缀下划线的一致性。
 
-Global and file scope constants should have an appropriate [prefix](#prefixes).
+#### 常量（Constants）
+
+> Constant symbols (const global and static variables and constants created
+> with #define) should use mixed case to delimit words.
+
+常量标识符（包括全局常量、静态变量和使用#define定义的常量）需使用驼峰命名；
+
+> Global and file scope constants should have an appropriate [prefix](#prefixes).
+
+全局和文件作用域常量要带有合适的前缀。
 
 ```objectivec 
 // GOOD:
@@ -569,12 +588,16 @@ typedef NS_ENUM(NSInteger, GTLServiceError) {
 };
 ```
 
-Because Objective-C does not provide namespacing, constants with external
-linkage should have a prefix that minimizes the chance of a name collision,
-typically like `ClassNameConstantName` or `ClassNameEnumName`.
+> Because Objective-C does not provide namespacing, constants with external
+> linkage should have a prefix that minimizes the chance of a name collision,
+> typically like `ClassNameConstantName` or `ClassNameEnumName`.
 
-For interoperability with Swift code, enumerated values should have names that
-extend the typedef name:
+由于Objective-C不支持命名空间，与外界关联的常量要使用前缀以最大程度避免命名冲突，常用方式例如`ClassNameConstantName` or `ClassNameEnumName`.
+
+> For interoperability with Swift code, enumerated values should have names that
+> extend the typedef name:
+
+与Swift有交互的Objective-C代码，枚举值变量要使用自定义类型名作为前缀：
 
 ```objectivec 
 // GOOD:
@@ -585,8 +608,10 @@ typedef NS_ENUM(NSInteger, DisplayTinge) {
 };
 ```
 
-A lowercase k can be used as a standalone prefix for constants of static storage
-duration declared within implementation files:
+> A lowercase k can be used as a standalone prefix for constants of static storage
+> duration declared within implementation files:
+
+在实现文件中，小写字母k可以被用来作为声明独立的常量或者静态变量前缀：
 
 ```objectivec 
 // GOOD:
@@ -595,9 +620,11 @@ static const int kFileCount = 12;
 static NSString *const kUserKey = @"kUserKey";
 ```
 
-NOTE: Previous convention was for public constant names to begin with a
-lowercase k followed by a project-specific [prefix](#prefixes). This practice is
-no longer recommended.
+> NOTE: Previous convention was for public constant names to begin with a
+> lowercase k followed by a project-specific [prefix](#prefixes). This practice is
+> no longer recommended.
+
+提示：之前约定中，公共常量名使用小写k开头，以作为工程常量特有标识。该方式不再推荐使用。
 
 ## Types and Declarations 
 
