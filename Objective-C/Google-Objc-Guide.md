@@ -35,58 +35,58 @@
 
 ### 关注读者，而非作者（Optimize for the reader, not the writer）
 
-Codebases often have extended lifetimes and more time is spent reading the code
-than writing it. We explicitly choose to optimize for the experience of our
-average software engineer reading, maintaining, and debugging code in our
-codebase rather than the ease of writing said code. For example, when something
-surprising or unusual is happening in a snippet of code, leaving textual hints
-for the reader is valuable.
+> Codebases often have extended lifetimes and more time is spent reading the code
+> than writing it. We explicitly choose to optimize for the experience of our
+> average software engineer reading, maintaining, and debugging code in our
+> codebase rather than the ease of writing said code. For example, when something
+> surprising or unusual is happening in a snippet of code, leaving textual hints
+> for the reader is valuable.
 
 阅读代码库中的代码的时间往往远大于书写的时间。我们很明确的选择优化普通软件开发工程师对于代码阅读、维护和调试的体验，而不是写出简易（指简陋甚至）的代码。例如，当对于一小段代码会让人感到惊奇或不寻常时（不可奇技淫巧），给读者书写一段文本注释或说明是非常可贵的。
 
 ### 保持一致性 （Be consistent）
 
-When the style guide allows multiple options it is preferable to pick one option
-over mixed usage of multiple options. Using one style consistently throughout a
-codebase lets engineers focus on other (more important) issues. Consistency also
-enables better automation because consistent code allows more efficient
-development and operation of tools that format or refactor code. In many cases,
-rules that are attributed to "Be Consistent" boil down to "Just pick one and
-stop worrying about it"; the potential value of allowing flexibility on these
-points is outweighed by the cost of having people argue over them.
+> When the style guide allows multiple options it is preferable to pick one option
+> over mixed usage of multiple options. Using one style consistently throughout a
+> codebase lets engineers focus on other (more important) issues. Consistency also
+> enables better automation because consistent code allows more efficient
+> development and operation of tools that format or refactor code. In many cases,
+> rules that are attributed to "Be Consistent" boil down to "Just pick one and
+> stop worrying about it"; the potential value of allowing flexibility on these
+> points is outweighed by the cost of having people argue over them.
 
 当编码风格规范中提供规范供选择时，选择一种规范要优于多种规范混用。代码库中使用一致的规范，会帮助工程师节省时间，将精力放在其他更重要的事情上（指减少因为编码规范不统一导致的各种误解）。由于一致的代码风格可以高效的开发和使用工具组件，所以，一致性也可以提高自动化程度。在很多场景中，保持一致性可以归结为“（快速）选一个，然后就不要再担心它”，这种选择的灵活性做法，对比花费更多时间争论选择哪种规范来使用，更具潜在价值。
 
 ### 与Apple SDKs保持一致（Be consistent with Apple SDKs）
 
-Consistency with the way Apple SDKs use Objective-C has value for the same
-reasons as consistency within our code base. If an Objective-C feature solves a
-problem that's an argument for using it. However, sometimes language features
-and idioms are flawed, or were just designed with assumptions that are not
-universal. In those cases it is appropriate to constrain or ban language
-features or idioms.
+> Consistency with the way Apple SDKs use Objective-C has value for the same
+> reasons as consistency within our code base. If an Objective-C feature solves a
+> problem that's an argument for using it. However, sometimes language features
+> and idioms are flawed, or were just designed with assumptions that are not
+> universal. In those cases it is appropriate to constrain or ban language
+> features or idioms.
 
 与上面说的保持一致性一样，与苹果Objective-C SDKs保持一致性同样具有价值。如果一个Objective-C的功能特性解决了一个由于参数使用导致的问题。然而，有时语言的特性和惯用语法是有缺陷的，或者本来就被设计的不是通用的。此时，避免或者禁用这些特性或惯用语法往往更好。
 
 ### 风格规范要适度（Style rules(编码规范) should pull their weight）
 
-The benefit of a style rule must be large enough to justify asking engineers to
-remember it. The benefit is measured relative to the codebase we would get
-without the rule, so a rule against a very harmful practice may still have a
-small benefit if people are unlikely to do it anyway. This principle mostly
-explains the rules we don’t have, rather than the rules we do: for example, goto
-contravenes many of the following principles, but is not discussed due to its
-extreme rarity.
+> The benefit of a style rule must be large enough to justify asking engineers to
+> remember it. The benefit is measured relative to the codebase we would get
+> without the rule, so a rule against a very harmful practice may still have a
+> small benefit if people are unlikely to do it anyway. This principle mostly
+> explains the rules we don’t have, rather than the rules we do: for example, goto
+> contravenes many of the following principles, but is not discussed due to its
+> extreme rarity.
 
 编码规范必须被证明足够有益，以便让工程师信服。这些收益是相对于我们拿一个完全没有规范的代码库来对比的，若工程师执行一个非常糟糕的编码规范，也比完全没有规范好一些。这一原则主要解释我们没有的规则，而不是我们已有的规则。例如，goto违反很多下述原则，但我们由于其极其少见，我们在此不讨论。
 
 ## 示例 (Example) 
 
-They say an example is worth a thousand words, so let's start off with an
-example that should give you a feel for the style, spacing, naming, and so on.
+> They say an example is worth a thousand words, so let's start off with an
+> example that should give you a feel for the style, spacing, naming, and so on.
 
-Here is an example header file, demonstrating the correct commenting and spacing
-for an `@interface` declaration.
+> Here is an example header file, demonstrating the correct commenting and spacing
+> for an `@interface` declaration.
 
 俗话说，一个例子胜过千言万语，所以我们举个例子，来初步感受一下编码风格、空格空行布局、命名等等编码规范。
 
@@ -140,8 +140,8 @@ for an `@interface` declaration.
 @end
 ```
 
-An example source file, demonstrating the correct commenting and spacing for the
-`@implementation` of an interface.
+> An example source file, demonstrating the correct commenting and spacing for the
+> `@implementation` of an interface.
 
 实现一个`@implementation` 的正确编码规范示例，展示正确的注释和间距（包括空行，回车，空格等）
 
@@ -190,15 +190,15 @@ An example source file, demonstrating the correct commenting and spacing for the
 
 ## 命名（Naming）
 
-Names should be as descriptive as possible, within reason. Follow standard
-[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
+> Names should be as descriptive as possible, within reason. Follow standard
+> [Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
 命名需要自达意（即看到命名，即可清楚知道代表的意义）且合理，参照[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
-Avoid non-standard abbreviations (including non-standard acronyms and
-initialisms). Don't worry about saving horizontal space as it is far more
-important to make your code immediately understandable by a new reader. For
-example:
+> Avoid non-standard abbreviations (including non-standard acronyms and
+> initialisms). Don't worry about saving horizontal space as it is far more
+> important to make your code immediately understandable by a new reader. For
+> example:
 
 禁用非标准缩写（包括非标准首字母缩略词）。 相对节约横向空间来说，对于一个新的读者来说，能够立即理解意义会更为重要，例如：
 
@@ -226,27 +226,27 @@ obj = [someObject object];
 p = [network port];
 ```
 
-Any class, category, method, function, or variable name should use all capitals
-for acronyms and [initialisms](https://en.wikipedia.org/wiki/Initialism)
-within the name. This follows Apple's standard of using all capitals within a
-name for acronyms such as URL, ID, TIFF, and EXIF.
+> Any class, category, method, function, or variable name should use all capitals
+> for acronyms and [initialisms](https://en.wikipedia.org/wiki/Initialism)
+> within the name. This follows Apple's standard of using all capitals within a
+> name for acronyms such as URL, ID, TIFF, and EXIF.
 
 任何类、扩展、方法、函数或者变量名，简称或者缩略语必须大写。对于名字，可参照苹果缩略语或简称大写字母标准，例如URL, ID, TIFF, EXIF。
 
-Names of C functions and typedefs should be capitalized and use camel case as
-appropriate for the surrounding code.
+> Names of C functions and typedefs should be capitalized and use camel case as
+> appropriate for the surrounding code.
 
 C语言函数或者typedef命名须首字母大写，使用驼峰命名方式区分大小写；
 
 ### 文件命名（File Names）
 
-File names should reflect the name of the class implementation that they
-contain—including case.
+> File names should reflect the name of the class implementation that they
+> contain—including case.
 
 文件命名须与该文件中实现的类名保持一致，包括大小写；
 
-Follow the convention that your project uses.
-File extensions should be as follows:
+> Follow the convention that your project uses.
+> File extensions should be as follows:
 
 文件扩展名，约定如下：
 
@@ -258,14 +258,14 @@ File extensions should be as follows:
 .cc       | 纯C++实现文件（Pure C++ implementation file） 
 .c        | C实现文件（C implementation file） 
 
-Files containing code that may be shared across projects or used in a large
-project should have a clearly unique name, typically including the project or
-class [prefix](#prefixes).
+> Files containing code that may be shared across projects or used in a large
+> project should have a clearly unique name, typically including the project or
+> class [prefix](#prefixes).
 
 包含跨工程或者较大工程中共用的代码的文件，必须有一个清晰唯一的名字，一般包括工程或者类名作为前缀。
 
-File names for categories should include the name of the class being extended,
-like GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
+> File names for categories should include the name of the class being extended,
+> like GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
 
 扩展类的文件名，须包含被扩展类的类名，例如GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
 
@@ -273,16 +273,16 @@ like GTMNSString+Utils.h or NSTextView+GTMAutocomplete.h
 
 ### 前缀（Prefixes）
 
-Prefixes are commonly required in Objective-C to avoid naming collisions in a
-global namespace. Classes, protocols, global functions, and global constants
-should generally be named with a prefix that begins with a capital letter
-followed by one or more capital letters or numbers.
+> Prefixes are commonly required in Objective-C to avoid naming collisions in a
+> global namespace. Classes, protocols, global functions, and global constants
+> should generally be named with a prefix that begins with a capital letter
+> followed by one or more capital letters or numbers.
 
 前缀被用来避免全局命名空间的命名冲突。类名、协议、全局方法和全局常量命名，要添加前缀，并且首字母大写，后面包含一个或几个数字或大写字母。
 
-WARNING: Apple reserves two-letter prefixes—see
-[Conventions in Programming with Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html)—so
-prefixes with a minimum of three characters are considered best practice.
+> WARNING: Apple reserves two-letter prefixes—see
+> [Conventions in Programming with Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html)—so
+> prefixes with a minimum of three characters are considered best practice.
 
 警告：苹果使用两个字母的前缀，参考[Conventions in Programming with Objective-C](https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html)，所以，建议最好使用最少三个字符的前缀。
 
@@ -307,14 +307,14 @@ extern NSTimeZone *GTMGetDefaultTimeZone(void);
 
 ### 类命名（Class Names）
 
-Class names (along with category and protocol names) should start as uppercase
-and use mixed case to delimit words.
+> Class names (along with category and protocol names) should start as uppercase
+> and use mixed case to delimit words.
 
 类命名（连同扩展和协议命名）需要使用首字母大写，大小写混合的方式来界定不同单词。
 
-Classes and protocols in code shared across multiple applications must have an
-appropriate [prefix](#prefixes) (e.g. GTMSendMessage). Prefixes are recommended,
-but not required, for other classes and protocols.
+> Classes and protocols in code shared across multiple applications must have an
+> appropriate [prefix](#prefixes) (e.g. GTMSendMessage). Prefixes are recommended,
+> but not required, for other classes and protocols.
 
 跨应用使用的类和协议必须使用合适的前缀（例如：GTMSendMessage）。对于其他类和协议，前缀被推荐使用，但不是必须的。
 
@@ -625,6 +625,8 @@ static NSString *const kUserKey = @"kUserKey";
 > no longer recommended.
 
 提示：之前约定中，公共常量名使用小写k开头，以作为工程常量特有标识。该方式不再推荐使用。
+
+
 
 ## Types and Declarations 
 
