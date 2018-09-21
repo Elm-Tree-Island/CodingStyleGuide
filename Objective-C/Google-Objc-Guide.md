@@ -628,19 +628,23 @@ static NSString *const kUserKey = @"kUserKey";
 
 
 
-## Types and Declarations 
+## 类型和声明（Types and Declarations ）
 
-### Method Declarations 
+### 方法声明（Method Declarations）
 
-As shown in the [example](#Example), the recommended order
-for declarations in an `@interface` declaration are: properties, class methods,
-initializers, and then finally instance methods. The class methods section
-should begin with any convenience constructors.
+> As shown in the [example](#Example), the recommended order
+> for declarations in an `@interface` declaration are: properties, class methods,
+> initializers, and then finally instance methods. The class methods section
+> should begin with any convenience constructors.
 
-### Local Variables 
+如示例所示，声明一个 `@interface` 内容的推荐顺序为：属性，类方法，初始化方法，之后实例方法。类方法区域，把[便捷初始化方法](https://zhuanlan.zhihu.com/p/35695874)放在前面。
 
-Declare variables in the narrowest practical scopes, and close to their use.
-Initialize variables in their declarations.
+### 局部变量（Local Variables）
+
+> Declare variables in the narrowest practical scopes, and close to their use.
+> Initialize variables in their declarations.
+
+在靠近需要使用该变量的地方声明变量，声明时完成初始化。
 
 ```objectivec 
 // GOOD:
@@ -651,10 +655,12 @@ for (int meters = 1; meters < 10; meters++) {
 }
 ```
 
-Occasionally, efficiency will make it more appropriate to declare a variable
-outside the scope of its use. This example declares meters separate from
-initialization, and needlessly sends the lastKnownLocation message each time
-through the loop:
+> Occasionally, efficiency will make it more appropriate to declare a variable
+> outside the scope of its use. This example declares meters separate from
+> initialization, and needlessly sends the lastKnownLocation message each time
+> through the loop:
+
+有时出于效率考虑，把变量声明在作用域外更可取。这个例子声明meters变量，并没有初始化，每次循环时，没必要每次都需要对location进行赋值。
 
 ```objectivec 
 // AVOID:
@@ -666,21 +672,29 @@ for (meters = 1; meters < 10; meters++) {
 }
 ```
 
-Under Automatic Reference Counting, strong and weak pointers to Objective-C
-objects are automatically initialized to `nil`, so explicit initialization to
-`nil` is not required for those common cases. However, automatic initialization
-does *not* occur for many Objective-C pointer types, including object pointers
-declared with the `__unsafe_unretained` ownership qualifier and CoreFoundation
-object pointer types. When in doubt, prefer to initialize all Objective-C
-local variables.
+> Under Automatic Reference Counting, strong and weak pointers to Objective-C
+> objects are automatically initialized to `nil`, so explicit initialization to
+> `nil` is not required for those common cases. However, automatic initialization
+> does *not* occur for many Objective-C pointer types, including object pointers
+> declared with the `__unsafe_unretained` ownership qualifier and CoreFoundation
+> object pointer types. When in doubt, prefer to initialize all Objective-C
+> local variables.
 
-### Unsigned Integers 
+使用ARC时，Objective-C对象的强、弱指针会被自动会被初始化为`nil`，所以通常不需要强制初始化为`nil`。然而，包括利用`__unsafe_unretained`声明的变量和CoreFoundation对象指针，很多Objective-C指针类型不会自动完成初始化。 当无法肯定时，建议所有Objective-C局部变量声明时进行初始化。
 
-Avoid unsigned integers except when matching types used by system interfaces.
 
-Subtle errors crop up when doing math or counting down to zero using unsigned
-integers. Rely only on signed integers in math expressions except when matching
-NSUInteger in system interfaces.
+
+### 无符号整型 （Unsigned Integers）
+
+> Avoid unsigned integers except when matching types used by system interfaces.
+
+除匹配系统接口调用外，避免使用无符号整型。
+
+> Subtle errors crop up when doing math or counting down to zero using unsigned
+> integers. Rely only on signed integers in math expressions except when matching
+> NSUInteger in system interfaces.
+
+使用无符号整型进行数学计算或出现倒数为0时，会出现微妙的错误。除匹配系统接口时使用NSUInteger外，数学计算时只使用带符号整型。
 
 ```objectivec 
 // GOOD:
@@ -695,17 +709,23 @@ for (NSInteger counter = numberOfObjects - 1; counter > 0; --counter)
 for (NSUInteger counter = numberOfObjects - 1; counter > 0; --counter)  // AVOID.
 ```
 
-Unsigned integers may be used for flags and bitmasks, though often NS_OPTIONS or
-NS_ENUM will be more appropriate.
+> Unsigned integers may be used for flags and bitmasks, though often NS_OPTIONS or
+> NS_ENUM will be more appropriate.
 
-### Types with Inconsistent Sizes 
+尽管推荐使用NS_OPTIONS或NS_ENUM，无符号整型可以被用来作为标志位或位运算掩码。
 
-Due to sizes that differ in 32- and 64-bit builds, avoid types long, NSInteger,
-NSUInteger, and CGFloat except when matching system interfaces.
+### 字节宽度可变类型（Types with Inconsistent Sizes)
 
-Types long, NSInteger, NSUInteger, and CGFloat vary in size between 32- and
-64-bit builds. Use of these types is appropriate when handling values exposed by
-system interfaces, but they should be avoided for most other computations.
+> Due to sizes that differ in 32- and 64-bit builds, avoid types long, NSInteger,
+> NSUInteger, and CGFloat except when matching system interfaces.
+
+由于long，NSInteger，NSUIInteger和CGFloat类型在32位和64位机上字节宽度不同，除必须匹配调用系统接口外，避免使用。
+
+> Types long, NSInteger, NSUInteger, and CGFloat vary in size between 32- and
+> 64-bit builds. Use of these types is appropriate when handling values exposed by
+> system interfaces, but they should be avoided for most other computations.
+
+long, NSInteger, NSUInteger, and CGFloat类型在32位和64位环境下字节宽度可变。处理系统暴露的数据时，可以使用上述类型，但其他运算，避免使用。
 
 ```objectivec 
 // GOOD:
@@ -725,8 +745,10 @@ CGFloat offset = view.bounds.origin.x;
 NSInteger scalar2 = proto.longValue;  // AVOID.
 ```
 
-File and buffer sizes often exceed 32-bit limits, so they should be declared
-using `int64_t`, not with `long`, `NSInteger`, or `NSUInteger`.
+> File and buffer sizes often exceed 32-bit limits, so they should be declared
+> using `int64_t`, not with `long`, `NSInteger`, or `NSUInteger`.
+
+文件或缓存区大小常常超过32位限制，所以应该使用`int64_t`，而不是`long`, `NSInteger`,或 `NSUInteger`。
 
 ## Comments 
 
