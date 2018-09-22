@@ -750,22 +750,32 @@ NSInteger scalar2 = proto.longValue;  // AVOID.
 
 文件或缓存区大小常常超过32位限制，所以应该使用`int64_t`，而不是`long`, `NSInteger`,或 `NSUInteger`。
 
-## Comments 
 
-Comments are absolutely vital to keeping our code readable. The following rules
-describe what you should comment and where. But remember: while comments are
-important, the best code is self-documenting. Giving sensible names to types and
-variables is much better than using obscure names and then trying to explain
-them through comments.
 
-Pay attention to punctuation, spelling, and grammar; it is easier to read
-well-written comments than badly written ones.
+## 注释（Comments）
 
-Comments should be as readable as narrative text, with proper capitalization and
-punctuation. In many cases, complete sentences are more readable than sentence
-fragments. Shorter comments, such as comments at the end of a line of code, can
-sometimes be less formal, but use a consistent style.
-When writing your comments, write for your audience: the next contributor who will need to understand your code. Be generous—the next one may be you!
+> Comments are absolutely vital to keeping our code readable. The following rules
+> describe what you should comment and where. But remember: while comments are
+> important, the best code is self-documenting. Giving sensible names to types and
+> variables is much better than using obscure names and then trying to explain
+> them through comments.
+
+注释对于保证代码可读性至关重要。以下规范说明在哪以及如何写注释。但请记住：
+
+> Pay attention to punctuation, spelling, and grammar; it is easier to read
+> well-written comments than badly written ones.
+
+注意（注释的）标点、拼写和语法；写的好的注释更易懂。（aka，注释要写的清楚明白，好好说话）
+
+> Comments should be as readable as narrative text, with proper capitalization and
+> punctuation. In many cases, complete sentences are more readable than sentence
+> fragments. Shorter comments, such as comments at the end of a line of code, can
+> sometimes be less formal, but use a consistent style.
+> When writing your comments, write for your audience: the next contributor who will need to understand your code. Be generous—the next one may be you!
+
+注释要读起来是叙事文字，需要使用合适的大小写和标点。很多场景中，完整的句子比一段段的文字更易懂。注释要简短，例如一行代码后的注释，可以是非正式的（句子），但请使用一致的风格。
+
+当你写注释时，要为你的读者而写，也就是后面需要读你代码的合作者。要慷慨些，也许他之后读注释的就是你自己。
 
 ### File Comments 
 
