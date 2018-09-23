@@ -628,19 +628,23 @@ static NSString *const kUserKey = @"kUserKey";
 
 
 
-## Types and Declarations 
+## 类型和声明（Types and Declarations ）
 
-### Method Declarations 
+### 方法声明（Method Declarations）
 
-As shown in the [example](#Example), the recommended order
-for declarations in an `@interface` declaration are: properties, class methods,
-initializers, and then finally instance methods. The class methods section
-should begin with any convenience constructors.
+> As shown in the [example](#Example), the recommended order
+> for declarations in an `@interface` declaration are: properties, class methods,
+> initializers, and then finally instance methods. The class methods section
+> should begin with any convenience constructors.
 
-### Local Variables 
+如示例所示，声明一个 `@interface` 内容的推荐顺序为：属性，类方法，初始化方法，之后实例方法。类方法区域，把[便捷初始化方法](https://zhuanlan.zhihu.com/p/35695874)放在前面。
 
-Declare variables in the narrowest practical scopes, and close to their use.
-Initialize variables in their declarations.
+### 局部变量（Local Variables）
+
+> Declare variables in the narrowest practical scopes, and close to their use.
+> Initialize variables in their declarations.
+
+在靠近需要使用该变量的地方声明变量，声明时完成初始化。
 
 ```objectivec 
 // GOOD:
@@ -651,10 +655,12 @@ for (int meters = 1; meters < 10; meters++) {
 }
 ```
 
-Occasionally, efficiency will make it more appropriate to declare a variable
-outside the scope of its use. This example declares meters separate from
-initialization, and needlessly sends the lastKnownLocation message each time
-through the loop:
+> Occasionally, efficiency will make it more appropriate to declare a variable
+> outside the scope of its use. This example declares meters separate from
+> initialization, and needlessly sends the lastKnownLocation message each time
+> through the loop:
+
+有时出于效率考虑，把变量声明在作用域外更可取。这个例子声明meters变量，并没有初始化，每次循环时，没必要每次都需要对location进行赋值。
 
 ```objectivec 
 // AVOID:
@@ -666,21 +672,29 @@ for (meters = 1; meters < 10; meters++) {
 }
 ```
 
-Under Automatic Reference Counting, strong and weak pointers to Objective-C
-objects are automatically initialized to `nil`, so explicit initialization to
-`nil` is not required for those common cases. However, automatic initialization
-does *not* occur for many Objective-C pointer types, including object pointers
-declared with the `__unsafe_unretained` ownership qualifier and CoreFoundation
-object pointer types. When in doubt, prefer to initialize all Objective-C
-local variables.
+> Under Automatic Reference Counting, strong and weak pointers to Objective-C
+> objects are automatically initialized to `nil`, so explicit initialization to
+> `nil` is not required for those common cases. However, automatic initialization
+> does *not* occur for many Objective-C pointer types, including object pointers
+> declared with the `__unsafe_unretained` ownership qualifier and CoreFoundation
+> object pointer types. When in doubt, prefer to initialize all Objective-C
+> local variables.
 
-### Unsigned Integers 
+使用ARC时，Objective-C对象的强、弱指针会被自动会被初始化为`nil`，所以通常不需要强制初始化为`nil`。然而，包括利用`__unsafe_unretained`声明的变量和CoreFoundation对象指针，很多Objective-C指针类型不会自动完成初始化。 当无法肯定时，建议所有Objective-C局部变量声明时进行初始化。
 
-Avoid unsigned integers except when matching types used by system interfaces.
 
-Subtle errors crop up when doing math or counting down to zero using unsigned
-integers. Rely only on signed integers in math expressions except when matching
-NSUInteger in system interfaces.
+
+### 无符号整型 （Unsigned Integers）
+
+> Avoid unsigned integers except when matching types used by system interfaces.
+
+除匹配系统接口调用外，避免使用无符号整型。
+
+> Subtle errors crop up when doing math or counting down to zero using unsigned
+> integers. Rely only on signed integers in math expressions except when matching
+> NSUInteger in system interfaces.
+
+使用无符号整型进行数学计算或出现倒数为0时，会出现微妙的错误。除匹配系统接口时使用NSUInteger外，数学计算时只使用带符号整型。
 
 ```objectivec 
 // GOOD:
@@ -695,17 +709,23 @@ for (NSInteger counter = numberOfObjects - 1; counter > 0; --counter)
 for (NSUInteger counter = numberOfObjects - 1; counter > 0; --counter)  // AVOID.
 ```
 
-Unsigned integers may be used for flags and bitmasks, though often NS_OPTIONS or
-NS_ENUM will be more appropriate.
+> Unsigned integers may be used for flags and bitmasks, though often NS_OPTIONS or
+> NS_ENUM will be more appropriate.
 
-### Types with Inconsistent Sizes 
+尽管推荐使用NS_OPTIONS或NS_ENUM，无符号整型可以被用来作为标志位或位运算掩码。
 
-Due to sizes that differ in 32- and 64-bit builds, avoid types long, NSInteger,
-NSUInteger, and CGFloat except when matching system interfaces.
+### 字节宽度可变类型（Types with Inconsistent Sizes)
 
-Types long, NSInteger, NSUInteger, and CGFloat vary in size between 32- and
-64-bit builds. Use of these types is appropriate when handling values exposed by
-system interfaces, but they should be avoided for most other computations.
+> Due to sizes that differ in 32- and 64-bit builds, avoid types long, NSInteger,
+> NSUInteger, and CGFloat except when matching system interfaces.
+
+由于long，NSInteger，NSUIInteger和CGFloat类型在32位和64位机上字节宽度不同，除必须匹配调用系统接口外，避免使用。
+
+> Types long, NSInteger, NSUInteger, and CGFloat vary in size between 32- and
+> 64-bit builds. Use of these types is appropriate when handling values exposed by
+> system interfaces, but they should be avoided for most other computations.
+
+long, NSInteger, NSUInteger, and CGFloat类型在32位和64位环境下字节宽度可变。处理系统暴露的数据时，可以使用上述类型，但其他运算，避免使用。
 
 ```objectivec 
 // GOOD:
@@ -725,45 +745,69 @@ CGFloat offset = view.bounds.origin.x;
 NSInteger scalar2 = proto.longValue;  // AVOID.
 ```
 
-File and buffer sizes often exceed 32-bit limits, so they should be declared
-using `int64_t`, not with `long`, `NSInteger`, or `NSUInteger`.
+> File and buffer sizes often exceed 32-bit limits, so they should be declared
+> using `int64_t`, not with `long`, `NSInteger`, or `NSUInteger`.
 
-## Comments 
-
-Comments are absolutely vital to keeping our code readable. The following rules
-describe what you should comment and where. But remember: while comments are
-important, the best code is self-documenting. Giving sensible names to types and
-variables is much better than using obscure names and then trying to explain
-them through comments.
-
-Pay attention to punctuation, spelling, and grammar; it is easier to read
-well-written comments than badly written ones.
-
-Comments should be as readable as narrative text, with proper capitalization and
-punctuation. In many cases, complete sentences are more readable than sentence
-fragments. Shorter comments, such as comments at the end of a line of code, can
-sometimes be less formal, but use a consistent style.
-When writing your comments, write for your audience: the next contributor who will need to understand your code. Be generous—the next one may be you!
-
-### File Comments 
-
-A file may optionally start with a description of its contents.
-Every file may contain the following items, in order:
-  * License boilerplate if necessary. Choose the appropriate boilerplate for the license used by the project.
-  * A basic description of the contents of the file if necessary.
-
-If you make significant changes to a file with an author line, consider deleting
-the author line since revision history already provides a more detailed and
-accurate record of authorship.
+文件或缓存区大小常常超过32位限制，所以应该使用`int64_t`，而不是`long`, `NSInteger`,或 `NSUInteger`。
 
 
-### Declaration Comments 
 
-Every non-trivial interface, public and private, should have an accompanying
-comment describing its purpose and how it fits into the larger picture.
+## 注释（Comments）
 
-Comments should be used to document classes, properties, ivars, functions,
-categories, protocol declarations, and enums.
+> Comments are absolutely vital to keeping our code readable. The following rules
+> describe what you should comment and where. But remember: while comments are
+> important, the best code is self-documenting. Giving sensible names to types and
+> variables is much better than using obscure names and then trying to explain
+> them through comments.
+
+注释对于保证代码可读性至关重要。以下规范说明在哪以及如何写注释。但请记住：
+
+> Pay attention to punctuation, spelling, and grammar; it is easier to read
+> well-written comments than badly written ones.
+
+注意（注释的）标点、拼写和语法；写的好的注释更易懂。（aka，注释要写的清楚明白，好好说话）
+
+> Comments should be as readable as narrative text, with proper capitalization and
+> punctuation. In many cases, complete sentences are more readable than sentence
+> fragments. Shorter comments, such as comments at the end of a line of code, can
+> sometimes be less formal, but use a consistent style.
+> When writing your comments, write for your audience: the next contributor who will need to understand your code. Be generous—the next one may be you!
+
+注释要读起来是叙事文字，需要使用合适的大小写和标点。很多场景中，完整的句子比一段段的文字更易懂。注释要简短，例如一行代码后的注释，可以是非正式的（句子），但请使用一致的风格。
+
+当你写注释时，要为你的读者而写，也就是后面需要读你代码的合作者。要慷慨些，也许他之后读注释的就是你自己。
+
+### 文件注释（File Comments）
+
+> A file may optionally start with a description of its contents.
+> Every file may contain the following items, in order:
+>
+> - License boilerplate if necessary. Choose the appropriate boilerplate for the license used by the project.
+> - A basic description of the contents of the file if necessary.
+
+文件头部可以添加该文件的注释说明。文件注释可以包含这些内容，顺序如下：
+
+- 如有必要，添加许可。选择工程使用的合适的许可引用说明
+- 文件内容简要说明
+
+> If you make significant changes to a file with an author line, consider deleting
+> the author line since revision history already provides a more detailed and
+> accurate record of authorship.
+
+如果对具有作者行的文件进行了重大更改，请考虑删除作者行，因为修订历史记录已提供更详细和准确的作者记录。
+
+
+### 声明注释（Declaration Comments）
+
+> Every non-trivial interface, public and private, should have an accompanying
+> comment describing its purpose and how it fits into the larger picture.
+
+每个公开和私有的重要接口，要有附加的注释说明其作用和试用场景。
+
+> Comments should be used to document classes, properties, ivars, functions,
+> categories, protocol declarations, and enums.
+
+注释适用于要有文档说明的类、属性、成员变量、方法、扩展、协议声明及枚举。
 
 ```objectivec 
 // GOOD:
@@ -786,37 +830,53 @@ categories, protocol declarations, and enums.
 @end
 ```
 
-Doxygen-style comments are encouraged for interfaces as they are parsed by Xcode
-to display formatted documentation. There is a wide variety of Doxygen commands;
-use them consistently within a project.
+> Doxygen-style comments are encouraged for interfaces as they are parsed by Xcode
+> to display formatted documentation. There is a wide variety of Doxygen commands;
+> use them consistently within a project.
 
-If you have already described an interface in detail in the comments at the top
-of your file, feel free to simply state, "See comment at top of file for a
-complete description", but be sure to have some sort of comment.
+接口推荐使用Doxygen风格注释，并可以利用xcode将注释原样转化为文档。Doxygen命令很多样，请在工程中保持一致，即使用同一套Doxygen命令
 
-Additionally, each method should have a comment explaining its function,
-arguments, return value, thread or queue assumptions, and any side effects.
-Documentation comments should be in the header for public methods, or
-immediately preceding the method for non-trivial private methods.
+> If you have already described an interface in detail in the comments at the top
+> of your file, feel free to simply state, "See comment at top of file for a
+> complete description", but be sure to have some sort of comment.
 
-Use descriptive form ("Opens the file") rather than imperative form ("Open the
-file") for method and function comments. The comment describes the function; it
-does not tell the function what to do.
+如果在文件顶部已经添加了对接口的详细说明，你可以轻松的指出："请参考文件顶部的完整说明"，但一定要有类似说明，说明一下。
 
-Document the thread usage assumptions the class, properties, or methods make, if
-any. If an instance of the class can be accessed by multiple threads, take extra
-care to document the rules and invariants surrounding multithreaded use.
+> Additionally, each method should have a comment explaining its function,
+> arguments, return value, thread or queue assumptions, and any side effects.
+> Documentation comments should be in the header for public methods, or
+> immediately preceding the method for non-trivial private methods.
 
-Any sentinel values for properties and ivars, such as `NULL` or `-1`, should be
-documented in comments.
+另外，每个方法需要有注释解释其功能、参数、返回值、使用线程假设，以及副作用。文档化注释需要在公开方法的头文件中，或者紧挨着重要的私有方法前。
 
-Declaration comments explain how a method or function is used. Comments
-explaining how a method or function is implemented should be with the
-implementation rather than with the declaration.
+> Use descriptive form ("Opens the file") rather than imperative form ("Open the
+> file") for method and function comments. The comment describes the function; it
+> does not tell the function what to do.
 
-### Implementation Comments 
+对于方法和函数的注释使用描述性形式，而不是使用命令形式。注释描述其功能，而不是让函数去做什么。
 
-Provide comments explaining tricky, subtle, or complicated sections of code.
+> Document the thread usage assumptions the class, properties, or methods make, if
+> any. If an instance of the class can be accessed by multiple threads, take extra
+> care to document the rules and invariants surrounding multithreaded use.
+
+对于类、属性、方法，如果需要，添加线程使用假设文档说明。若类的示例被多个线程访问使用，对此文档中要格外说明其在多线程中使用规范及不变式。
+
+> Any sentinel values for properties and ivars, such as `NULL` or `-1`, should be
+> documented in comments.
+
+任何属性或成员变量的临界值，例如`NULL`或`-1`, 都需要在文档中注释说明其代表的意义。
+
+> Declaration comments explain how a method or function is used. Comments
+> explaining how a method or function is implemented should be with the
+> implementation rather than with the declaration.
+
+声明注释用于解释方法或函数应该如何被使用。那些解释方法或函数是如何实现的注释，应该添加在实现处，而不是函数或方法的声明处。
+
+### 实现注释（Implementation Comments）
+
+> Provide comments explaining tricky, subtle, or complicated sections of code.
+
+对刁钻、微妙或复杂的代码添加注释，解释其中奥妙。
 
 ```objectivec 
 // GOOD:
@@ -829,12 +889,16 @@ self.completionHandler = nil;
 handler();
 ```
 
-When useful, also provide comments about implementation approaches that were
-considered or abandoned.
+> When useful, also provide comments about implementation approaches that were
+> considered or abandoned.
 
-End-of-line comments should be separated from the code by at least 2 spaces. If
-you have several comments on subsequent lines, it can often be more readable to
-line them up.
+如果需要，也对一些考虑使用或放弃使用的方法实现添加注释。
+
+> End-of-line comments should be separated from the code by at least 2 spaces. If
+> you have several comments on subsequent lines, it can often be more readable to
+> line them up.
+
+跟在代码行尾的注释需要至少用两个空格隔开代码与注释。如果你在随后的多行里有多个注释，更易读的办法是把他们（对齐）排好。
 
 ```objectivec 
 // GOOD:
@@ -843,18 +907,24 @@ line them up.
 [self doSomethingShort];          // More spacing to align the comment.
 ```
 
-### Disambiguating Symbols 
+### 消除符号歧义（Disambiguating Symbols）
 
-Where needed to avoid ambiguity, use backticks or vertical bars to quote
-variable names and symbols in comments in preference to using quotation marks
-or naming the symbols inline.
+> Where needed to avoid ambiguity, use backticks or vertical bars to quote
+> variable names and symbols in comments in preference to using quotation marks
+> or naming the symbols inline.
 
-In Doxygen-style comments, prefer demarcating symbols with a monospace text
-command, such as `@c`.
+在需要避免歧义的地方，使用反引号或竖杠将注释中变量名字或符号引起来，要优于使用引号或内联命名符号。
 
-Demarcation helps provide clarity when a symbol is a common word that might make
-the sentence read like it was poorly constructed. A common example is the symbol
-`count`:
+> In Doxygen-style comments, prefer demarcating symbols with a monospace text
+> command, such as `@c`.
+
+在Doxygen风格注释中，更建议使用等宽文本命令来划分标定符号，例如`@c`。
+
+> Demarcation helps provide clarity when a symbol is a common word that might make
+> the sentence read like it was poorly constructed. A common example is the symbol
+> `count`:
+
+当一个符号命名是常用单词时，划定边界会使注释更清晰。若不划分，可能会使句子读起来不通顺。常见的例子如单词`count`：
 
 ```objectivec 
 // GOOD:
@@ -862,7 +932,9 @@ the sentence read like it was poorly constructed. A common example is the symbol
 // Sometimes `count` will be less than zero.
 ```
 
-or when quoting something which already contains quotes
+> or when quoting something which already contains quotes
+
+或引用已经有引号的文字
 
 ```objectivec 
 // GOOD:
@@ -870,7 +942,9 @@ or when quoting something which already contains quotes
 // Remember to call `StringWithoutSpaces("foo bar baz")`
 ```
 
-Backticks or vertical bars are not needed when a symbol is self-apparent.
+> Backticks or vertical bars are not needed when a symbol is self-apparent.
+
+对于显而易见的文字不需要添加反引号或竖杠。
 
 ```objectivec 
 // GOOD:
@@ -878,7 +952,9 @@ Backticks or vertical bars are not needed when a symbol is self-apparent.
 // This class serves as a delegate to GTMDepthCharge.
 ```
 
-Doxygen formatting is also suitable for identifying symbols.
+> Doxygen formatting is also suitable for identifying symbols.
+
+Doxygen格式化同样适用标识符号。
 
 ```objectivec 
 // GOOD:
@@ -886,27 +962,37 @@ Doxygen formatting is also suitable for identifying symbols.
 /** @param maximum The highest value for @c count. */
 ```
 
-### Object Ownership 
+### 对象所有权（Object Ownership）
 
-For objects not managed by ARC, make the pointer ownership model as explicit as
-possible when it falls outside the most common Objective-C usage idioms.
+> For objects not managed by ARC, make the pointer ownership model as explicit as
+> possible when it falls outside the most common Objective-C usage idioms.
 
-#### Manual Reference Counting 
+不在ARC管理下的对象，当这些对象的指针在常见的Objective-C常用用法之外时，需要尽可能明确的说明该对象的指针。
 
-Instance variables for NSObject-derived objects are presumed to be retained; if
-they are not retained, they should be either commented as weak or declared with
-the `__weak` lifetime qualifier.
+#### MRC（Manual Reference Counting）
 
-An exception is in Mac software for instance variables labeled as `@IBOutlets`,
-which are presumed to not be retained.
+> Instance variables for NSObject-derived objects are presumed to be retained; if
+> they are not retained, they should be either commented as weak or declared with
+> the `__weak` lifetime qualifier.
 
-Where instance variables are pointers to Core Foundation, C++, and other
-non-Objective-C objects, they should always be declared with strong and weak
-comments to indicate which pointers are and are not retained. Core Foundation
-and other non-Objective-C object pointers require explicit memory management,
-even when building for automatic reference counting.
+NSObject子类的所有示例对象都被假定为会被保留计数，若他们没有被保留计数，要么需要注释为弱引用，要么声明时使用为`__weak`标识符。
 
-Examples of strong and weak declarations:
+> An exception is in Mac software for instance variables labeled as `@IBOutlets`,
+> which are presumed to not be retained.
+
+在Mac软件中，被标示为 `@IBOutlets`的实例变量是个例外，这些变量假定不会被保留计数。
+
+> Where instance variables are pointers to Core Foundation, C++, and other
+> non-Objective-C objects, they should always be declared with strong and weak
+> comments to indicate which pointers are and are not retained. Core Foundation
+> and other non-Objective-C object pointers require explicit memory management,
+> even when building for automatic reference counting.
+
+当实例变量指向Core Foundation，C++或其他非Objective-C对象，这些变量应该使用使用strong和weak，注释其哪些是被保留的，哪些不保留。Core Foundation和其他非Objective-C对象指针需要清晰明确的内存管理，即便使用ARC情况下也一样。
+
+> Examples of strong and weak declarations:
+
+strong和weak声明示例
 
 ```objectivec 
 // GOOD:
@@ -932,10 +1018,14 @@ Examples of strong and weak declarations:
 @end
 ```
 
-#### Automatic Reference Counting 
+#### ARC （Automatic Reference Counting）
 
-Object ownership and lifetime are explicit when using ARC, so no additional
-comments are required for automatically retained objects.
+> Object ownership and lifetime are explicit when using ARC, so no additional
+> comments are required for automatically retained objects.
+
+当使用ARC时，对象所有权和生命周期很清晰，所以不需要额外的注释来说明自动引用计数变量。
+
+
 
 ## C Language Features 
 
