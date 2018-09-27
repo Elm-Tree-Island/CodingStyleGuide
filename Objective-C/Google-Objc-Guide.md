@@ -1027,25 +1027,33 @@ strong和weak声明示例
 
 
 
-## C Language Features 
+## C语言特性（C Language Features）
 
-### Macros 
+### 宏（Macros）
 
-Avoid macros, especially where `const` variables, enums, XCode snippets, or C
-functions may be used instead.
+> Avoid macros, especially where `const` variables, enums, XCode snippets, or C
+> functions may be used instead.
 
-Macros make the code you see different from the code the compiler sees. Modern C
-renders traditional uses of macros for constants and utility functions
-unnecessary. Macros should only be used when there is no other solution
-available.
+若能使用`const`变量，枚举，Xcode代码片段，或C函数，请不要使用宏。
 
-Where a macro is needed, use a unique name to avoid the risk of a symbol
-collision in the compilation unit. If practical, keep the scope limited by
-`#undefining` the macro after its use.
+> Macros make the code you see different from the code the compiler sees. Modern C
+> renders traditional uses of macros for constants and utility functions
+> unnecessary. Macros should only be used when there is no other solution
+> available.
 
-Macro names should use `SHOUTY_SNAKE_CASE`—all uppercase letters with
-underscores between words. Function-like macros may use C function naming
-practices. Do not define macros that appear to be C or Objective-C keywords.
+宏会使你看到的代码和编译器看到的代码不同。现代C使用宏的的传统用途不再是常量和工具函数。现在宏只有在没有其他解决方案时才被使用。
+
+> Where a macro is needed, use a unique name to avoid the risk of a symbol
+> collision in the compilation unit. If practical, keep the scope limited by
+> `#undefining` the macro after its use.
+
+需要宏的地方，使用唯一的名字以避免在汇编时符号冲突。如果可行，使用`#undefining`限制宏的使用范围。
+
+> Macro names should use `SHOUTY_SNAKE_CASE`—all uppercase letters with
+> underscores between words. Function-like macros may use C function naming
+> practices. Do not define macros that appear to be C or Objective-C keywords.
+
+宏的名字应该使用`SHOUTY_SNAKE_CASE`形式——所有字母大写，使用下划线链接不同单词。函数类的宏使用函数的命名规范。不要定义和C或Objective-C关键字同名的宏。
 
 ```objectivec 
 // GOOD:
@@ -1067,16 +1075,22 @@ practices. Do not define macros that appear to be C or Objective-C keywords.
 #define unless(X) if(!(X))              // AVOID
 ```
 
-Avoid macros that expand to unbalanced C or Objective-C constructs. Avoid macros
-that introduce scope, or may obscure the capturing of values in blocks.
+> Avoid macros that expand to unbalanced C or Objective-C constructs. Avoid macros
+> that introduce scope, or may obscure the capturing of values in blocks.
 
-Avoid macros that generate class, property, or method definitions in
-headers to be used as public API. These only make the code hard to
-understand, and the language already has better ways of doing this.
+*这一段突然不知道如何翻译*，大意是：避免使用会导致C或Objective-C构造方法错乱的宏，避免使用会引入作用域或让block中变量持有者模糊（防止内存泄漏）的宏。
 
-Avoid macros that generate method implementations, or that generate declarations
-of variables that are later used outside of the macro. Macros shouldn't make
-code hard to understand by hiding where and how a variable is declared.
+> Avoid macros that generate class, property, or method definitions in
+> headers to be used as public API. These only make the code hard to
+> understand, and the language already has better ways of doing this.
+
+避免在公用API头文件中使用可以生成类，属性或方法定义的宏。这种用法会导致代码难懂，而且语言本身有相对此方法更好的实现方法。
+
+> Avoid macros that generate method implementations, or that generate declarations
+> of variables that are later used outside of the macro. Macros shouldn't make
+> code hard to understand by hiding where and how a variable is declared.
+
+避免使用生成方法实现的宏（比如生成单例方法的宏等）或者可生成变量声明，且该变量在宏外使用的宏。宏不能隐藏变量在何处以及如何被声明，这会导致代码晦涩难懂。
 
 ```objectivec 
 // AVOID:
@@ -1091,22 +1105,34 @@ ARRAY_ADDER(NSString) {
 }
 ```
 
-Examples of acceptable macro use include assertion and debug logging macros
-that are conditionally compiled based on build settings—often, these are
-not compiled into release builds.
+> Examples of acceptable macro use include assertion and debug logging macros
+> that are conditionally compiled based on build settings—often, these are
+> not compiled into release builds.
 
-### Nonstandard Extensions 
+宏中使用assert或根据编译设置，进行debug有条件编译，这可以接受，一般情况下这些条件编译代码不会包含在release版本中。
 
-Nonstandard extensions to C/Objective-C may not be used unless otherwise
-specified.
+### 非标准扩展宏（Nonstandard Extensions）
 
-Compilers support various extensions that are not part of standard C. Examples
-include compound statement expressions (e.g. `foo = ({ int x; Bar(&x); x })`).
+> Nonstandard extensions to C/Objective-C may not be used unless otherwise
+> specified.
 
-`__attribute__` is an approved exception, as it is used in Objective-C API
-specifications.
+C/Objective-C非标准扩展宏，除非特别说明，否则不可使用。
 
-The binary form of the conditional operator, `A ?: B`, is an approved exception.
+> Compilers support various extensions that are not part of standard C. Examples
+> include compound statement expressions (e.g. `foo = ({ int x; Bar(&x); x })`).
+
+编译器支持大量的非标准C语言扩展宏。例如复合语句表达式(例如： `foo = ({ int x; Bar(&x); x })`).
+
+> `__attribute__` is an approved exception, as it is used in Objective-C API
+> specifications.
+
+`__attribute__` 是一个在Objective-C API被认可和使用的扩展宏。
+
+> The binary form of the conditional operator, `A ?: B`, is an approved exception.
+
+对于三元运算符，`A ?: B`这种用法是个例外，也被认可使用。
+
+
 
 ## Cocoa and Objective-C Features 
 
