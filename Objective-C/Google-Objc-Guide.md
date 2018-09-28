@@ -1597,24 +1597,32 @@ variables.
 @end
 ```
 
-## Cocoa Patterns 
+## Cocoa模式（Cocoa Patterns）
 
-### Delegate Pattern 
+### Delegate模式（Delegate Pattern）
 
-Delegates, target objects, and block pointers should not be retained when doing
-so would create a retain cycle.
+> Delegates, target objects, and block pointers should not be retained when doing
+> so would create a retain cycle.
 
-To avoid causing a retain cycle, a delegate or target pointer should be released
-as soon as it is clear there will no longer be a need to message the object.
+Delegate，target对象，block指针不可使用retain，不然会产生循环引用。
 
-If there is no clear time at which the delegate or target pointer is no longer
-needed, the pointer should only be retained weakly.
+> To avoid causing a retain cycle, a delegate or target pointer should be released
+> as soon as it is clear there will no longer be a need to message the object.
 
-Block pointers cannot be retained weakly. To avoid causing retain cycles in the
-client code, block pointers should be used for callbacks only where they can be
-explicitly released after they have been called or once they are no longer
-needed. Otherwise, callbacks should be done via weak delegate or target
-pointers.
+为避免引起循环引用，delegate或响应对象指针需要被及时清理，以便后续发送的消息不再被响应。
+
+> If there is no clear time at which the delegate or target pointer is no longer
+> needed, the pointer should only be retained weakly.
+
+若delegate或响应对象指针在后续不被需要时，没有一个清晰的时间点，那么该delegate或响应对象指针应该被设置为弱引用。
+
+> Block pointers cannot be retained weakly. To avoid causing retain cycles in the
+> client code, block pointers should be used for callbacks only where they can be
+> explicitly released after they have been called or once they are no longer
+> needed. Otherwise, callbacks should be done via weak delegate or target
+> pointers.
+
+Block指针不可使用弱引用。为避免在客户端代码中出现循环引用，block指针只有在被调用一次或者他们不被需要时会被明确的清理，才可以用于回调方法。否则，回调方法应该通过弱引用的delegate或者响应对象指针来实现。
 
 ## Objective-C++ 
 
