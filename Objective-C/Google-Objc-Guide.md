@@ -1624,14 +1624,18 @@ Delegate，target对象，block指针不可使用retain，不然会产生循环�
 
 Block指针不可使用弱引用。为避免在客户端代码中出现循环引用，block指针只有在被调用一次或者他们不被需要时会被明确的清理，才可以用于回调方法。否则，回调方法应该通过弱引用的delegate或者响应对象指针来实现。
 
+
+
 ## Objective-C++ 
 
 ### Style Matches the Language 
 
-Within an Objective-C++ source file, follow the style for the language of the
-function or method you're implementing. In order to minimize clashes between the
-differing naming styles when mixing Cocoa/Objective-C and C++, follow the style
-of the method being implemented.
+> Within an Objective-C++ source file, follow the style for the language of the
+> function or method you're implementing. In order to minimize clashes between the
+> differing naming styles when mixing Cocoa/Objective-C and C++, follow the style
+> of the method being implemented.
+
+对于Objective-C++源码文件，遵守函数或方法实现语言的编码规范。为了将Cocoa/Objective-C、C++不同语言混合使用导致的命名风格冲突最小化，遵守源码中方法的实现使用的编码风格。
 
 For code in an `@implementation` block, use the Objective-C naming rules. For
 code in a method of a C++ class, use the C++ naming rules.
