@@ -1134,57 +1134,76 @@ C/Objective-C非标准扩展宏，除非特别说明，否则不可使用。
 
 
 
-## Cocoa and Objective-C Features 
+## Cocoa&Objective-C特性 （Cocoa and Objective-C Features）
 
-### Identify Designated Initializer 
+### 明确特定初始化器（Identify Designated Initializer）
 
-Clearly identify your designated initializer.
+> Clearly identify your designated initializer.
 
-It is important for those who might be subclassing your class that the
-designated initializer be clearly identified. That way, they only need to
-override a single initializer (of potentially several) to guarantee the
-initializer of their subclass is called. It also helps those debugging your
-class in the future understand the flow of initialization code if they need to
-step through it. Identify the designated initializer using comments or the
-`NS_DESIGNATED_INITIALIZER` macro. If you use `NS_DESIGNATED_INITIALIZER`, mark
-unsupported initializers with `NS_UNAVAILABLE`.
+清晰指明你的特定初始化器（也可以理解成初始化方法）。
 
-### Override Designated Initializer 
+> It is important for those who might be subclassing your class that the
+> designated initializer be clearly identified. That way, they only need to
+> override a single initializer (of potentially several) to guarantee the
+> initializer of their subclass is called. It also helps those debugging your
+> class in the future understand the flow of initialization code if they need to
+> step through it. Identify the designated initializer using comments or the
+> `NS_DESIGNATED_INITIALIZER` macro. If you use `NS_DESIGNATED_INITIALIZER`, mark
+> unsupported initializers with `NS_UNAVAILABLE`.
 
-When writing a subclass that requires an `init...` method, make sure you
-override the designated initializer of the superclass.
+清晰的指明你创建的类的特定初始化器，这一点在其他人创建继承自你的类时显得非常重要。这样的话，他们只需要重写某一个或几个初始化器就可以保证他们的子类初始化方法被调用。这也可以帮助后面可能调试代码的人，更清晰的了解你的类初始化流程。请使用注释或者`NS_DESIGNATED_INITIALIZER` 宏指明你的特定初始化器。如果使用`NS_DESIGNATED_INITIALIZER` 宏，请将其他不支持的初始化器用 `NS_UNAVAILABLE`来标注。
 
-If you fail to override the designated initializer of the superclass, your
-initializer may not be called in all cases, leading to subtle and very difficult
-to find bugs.
+### 重写指定初始化器（Override Designated Initializer）
 
-### Overridden NSObject Method Placement 
+> When writing a subclass that requires an `init...` method, make sure you
+> override the designated initializer of the superclass.
 
-Put overridden methods of NSObject at the top of an `@implementation`.
+若实现一个类需要 `init...` 方法，必须重写父类的指定初始化器。
 
-This commonly applies to (but is not limited to) the `init...`, `copyWithZone:`,
-and `dealloc` methods. The `init...` methods should be grouped together,
-followed by other typical `NSObject` methods such as `description`, `isEqual:`,
-and `hash`.
+> If you fail to override the designated initializer of the superclass, your
+> initializer may not be called in all cases, leading to subtle and very difficult
+> to find bugs.
 
-Convenience class factory methods for creating instances may precede the
-`NSObject` methods.
+如果不重写父类的指定初始化器，你自己的初始化器可能不会保证在所有情况下都被调用，这会导致bug很诡异，难以被发现。
 
-### Initialization 
+### NSObject重写方法的放置位置（Overridden NSObject Method Placement)
 
-Don't initialize instance variables to `0` or `nil` in the `init` method; doing
-so is redundant.
+> Put overridden methods of NSObject at the top of an `@implementation`.
 
-All instance variables for a newly allocated object are [initialized
-to](https://developer.apple.com/library/mac/documentation/General/Conceptual/CocoaEncyclopedia/ObjectAllocation/ObjectAllocation.html)
-`0` (except for isa), so don't clutter up the init method by re-initializing
-variables to `0` or `nil`.
+将NSObject的重写方法置于`@implementation`部分的顶部。
 
-### Instance Variables In Headers Should Be @protected or @private 
+> This commonly applies to (but is not limited to) the `init...`, `copyWithZone:`,
+> and `dealloc` methods. The `init...` methods should be grouped together,
+> followed by other typical `NSObject` methods such as `description`, `isEqual:`,
+> and `hash`.
 
-Instance variables should typically be declared in implementation files or
-auto-synthesized by properties. When ivars are declared in a header file, they
-should be marked `@protected` or `@private`.
+这通常用于但不局限于 `init...`, `copyWithZone:`, `dealloc`方法。 `init…` 一类的方法要集合放置在一起，后面可以放置其他 `NSObject` 常用方法，例如 `description`, `isEqual:`和 `hash`。
+
+> Convenience class factory methods for creating instances may precede the
+> `NSObject` methods.
+
+便捷的创建对象的工厂方法可以放置在`NSObject` 之前。
+
+### 初始化（Initialization）
+
+> Don't initialize instance variables to `0` or `nil` in the `init` method; doing
+> so is redundant.
+
+不必在 `init` 方法中初始化实例变量为 `0` 或 `nil` ，多余！
+
+> All instance variables for a newly allocated object are [initialized to](https://developer.apple.com/library/mac/documentation/General/Conceptual/CocoaEncyclopedia/ObjectAllocation/ObjectAllocation.html)
+> `0` (except for isa), so don't clutter up the init method by re-initializing
+> variables to `0` or `nil`.
+
+所有新创建的实例变量都会被初始化为0（isa除外），所以不必散乱的在init初始化方法中将实例变量初始化为 `0` 或 `nil`。
+
+### 头文件中的实例变量的作用域应该是@protected或@private（Instance Variables In Headers Should Be @protected or @private）
+
+> Instance variables should typically be declared in implementation files or
+> auto-synthesized by properties. When ivars are declared in a header file, they
+> should be marked `@protected` or `@private`.
+
+实例变量通常被放置在头文件中，或通过property被自动synthesize。若实例变量被声明在头文件中，这些成员变量需要被标记为 `@protected` 或 `@private`。
 
 ```objectivec 
 // GOOD:
@@ -1196,53 +1215,77 @@ should be marked `@protected` or `@private`.
 @end
 ```
 
-### Do Not Use +new 
+### 不要使用+new（Do Not Use +new）
 
-Do not invoke the `NSObject` class method `new`, nor override it in a subclass.
-`+new` is rarely used and contrasts greatly with initializer usage. Instead, use
-`+alloc` and `-init` methods to instantiate retained objects.
+> Do not invoke the `NSObject` class method `new`, nor override it in a subclass.
+> `+new` is rarely used and contrasts greatly with initializer usage. Instead, use
+> `+alloc` and `-init` methods to instantiate retained objects.
 
-### Keep the Public API Simple 
+不可调用NSObject的类方法`new`或在子类中重写该方法。`+new`方法很少使用，与初始化器的使用有很大的不同。相反，一般使用+alloc和-init方法来创建和初始化实例对象。
 
-Keep your class simple; avoid "kitchen-sink" APIs. If a method doesn't need to
-be public, keep it out of the public interface.
+### 保证公开API简单（Keep the Public API Simple）
 
-Unlike C++, Objective-C doesn't differentiate between public and private
-methods; any message may be sent to an object. As a result, avoid placing
-methods in the public API unless they are actually expected to be used by a
-consumer of the class. This helps reduce the likelihood they'll be called when
-you're not expecting it. This includes methods that are being overridden from
-the parent class.
+> Keep your class simple; avoid "kitchen-sink" APIs. If a method doesn't need to
+> be public, keep it out of the public interface.
 
-Since internal methods are not really private, it's easy to accidentally
-override a superclass's "private" method, thus making a very difficult bug to
-squash. In general, private methods should have a fairly unique name that will
-prevent subclasses from unintentionally overriding them.
+保持类简单，避免“kitchen-sink”（激进现实主义）API。如果一个方法不需要作为公开方法，请不要暴露在公开接口中。
 
-### #import and #include 
+> Unlike C++, Objective-C doesn't differentiate between public and private
+> methods; any message may be sent to an object. As a result, avoid placing
+> methods in the public API unless they are actually expected to be used by a
+> consumer of the class. This helps reduce the likelihood they'll be called when
+> you're not expecting it. This includes methods that are being overridden from
+> the parent class.
 
-`#import` Objective-C and Objective-C++ headers, and `#include` C/C++ headers.
+和C++不同，Objective-C在公开方法和私有方法之间并没有什么太多区分，任何消息都可能被发送给对象。因此，只有使用者需要调用某一个方法时，才把这个方法放置在公开的API中。这样可以降低一些你不希望外界调用的方法被调用的可能性，这也包括重写的父类方法。
 
-C/C++ headers include other C/C++ headers using `#include`. Using `#import`
-on C/C++ headers prevents future inclusions using `#include` and could result in
-unintended compilation behavior.
-C/C++ headers should provide their own `#define` guard.
+> Since internal methods are not really private, it's easy to accidentally
+> override a superclass's "private" method, thus making a very difficult bug to
+> squash. In general, private methods should have a fairly unique name that will
+> prevent subclasses from unintentionally overriding them.
 
-### Order of Includes 
+因为内部方法并不是真正的私有方法，也容易碰巧重写一个父类的私有方法，这样会导致很难排除由此引起的bug。通常隐私方法需要有一个较为独特的名字，这样可以防止子类无意的重写这些方法。
 
-The standard order for header inclusion is the related header, operating system
-headers, language library headers, and finally groups of headers for other
-dependencies.
+### #import和#include（#import and #include）
 
-The related header precedes others to ensure it has no hidden dependencies.
-For implementation files the related header is the header file.
-For test files the related header is the header containing the tested interface.
+> `#import` Objective-C and Objective-C++ headers, and `#include` C/C++ headers.
 
-A blank line may separate logically distinct groups of included headers.
+使用`#import`引用Objective-C 和 Objective-C++头文件，用`#include` C/C++头文件。
 
-Within each group the includes should be ordered alphabetically.
+> C/C++ headers include other C/C++ headers using `#include`. Using `#import`
+> on C/C++ headers prevents future inclusions using `#include` and could result in
+> unintended compilation behavior.
+> C/C++ headers should provide their own `#define` guard.
 
-Import headers using their path relative to the project's source directory.
+C/C++头文件中引用其他C/C++头文件使用`#include`。使用`#import`引用C/C++头文件，以避免后面使用 `#include` 可能导致的头文件冲突和编译问题。
+
+C/C++每个头文件中需要有自己`#define`保护，（以防止头文件被重复引用导致的重复编译的问题）。
+
+### 头文件引用顺序（Order of Includes）
+
+> The standard order for header inclusion is the related header, operating system
+> headers, language library headers, and finally groups of headers for other
+> dependencies.
+
+标准头文件引用顺序为相关头文件、系统头文件、语言库头文件，最终是其他引用头文件。
+
+> The related header precedes others to ensure it has no hidden dependencies.
+> For implementation files the related header is the header file.
+> For test files the related header is the header containing the tested interface.
+
+相关头文件放在其他头文件前，可以保证其他隐藏依赖。对于implementation文件，它的相关头文件就是它自己的头文件。对于测试文件，它的相关头文件就是包含被测试接口的头文件。
+
+> A blank line may separate logically distinct groups of included headers.
+
+使用空行来区分不同类别的头文件。
+
+> Within each group the includes should be ordered alphabetically.
+
+不同类别的头文件，需要按字母顺序排列。
+
+> Import headers using their path relative to the project's source directory.
+
+使用相对路径引用头文件，以工程目录作为根目录。
 
 ```objectivec 
 // GOOD:
