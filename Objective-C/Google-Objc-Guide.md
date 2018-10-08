@@ -1223,7 +1223,7 @@ C/Objective-C非标准扩展宏，除非特别说明，否则不可使用。
 
 不可调用NSObject的类方法`new`或在子类中重写该方法。`+new`方法很少使用，与初始化器的使用有很大的不同。相反，一般使用+alloc和-init方法来创建和初始化实例对象。
 
-### 保证公开API简单（Keep the Public API Simple）
+### 公开API保持简单（Keep the Public API Simple）
 
 > Keep your class simple; avoid "kitchen-sink" APIs. If a method doesn't need to
 > be public, keep it out of the public interface.
@@ -1285,7 +1285,7 @@ C/C++每个头文件中需要有自己`#define`保护，（以防止头文件被
 
 > Import headers using their path relative to the project's source directory.
 
-使用相对路径引用头文件，以工程目录作为根目录。
+以工程目录作为根目录，使用相对路径引用头文件。
 
 ```objectivec 
 // GOOD:
@@ -1305,16 +1305,20 @@ C/C++每个头文件中需要有自己`#define`保护，（以防止头文件被
 #import "Shared/Util/Foo.h"
 ```
 
-### Use Umbrella Headers for System Frameworks 
+### 使用系统库Umbrella头文件（Use Umbrella Headers for System Frameworks）
 
-Import umbrella headers for system frameworks and system libraries rather than
-include individual files.
+> Import umbrella headers for system frameworks and system libraries rather than
+> include individual files.
 
-While it may seem tempting to include individual system headers from a framework
-such as Cocoa or Foundation, in fact it's less work on the compiler if you
-include the top-level root framework. The root framework is generally
-pre-compiled and can be loaded much more quickly. In addition, remember to use
-`@import` or `#import` rather than `#include` for Objective-C frameworks.
+引用系统库的umbrella头文件，而不是引用某几个单独的头文件。（关于umbrella头文件，更像是一个库中专门暴露出来，供外界使用者去引用的头文件，而不是引用库中的某些头文件，详细解析请Google）
+
+> While it may seem tempting to include individual system headers from a framework
+> such as Cocoa or Foundation, in fact it's less work on the compiler if you
+> include the top-level root framework. The root framework is generally
+> pre-compiled and can be loaded much more quickly. In addition, remember to use
+> `@import` or `#import` rather than `#include` for Objective-C frameworks.
+
+人们似乎更倾向引用Cocoa或Foundation系统库中单独的头文件，这样看起来引用更简单，但事实上，引用系统库的顶层头文件会让编译器做更少的工作。根框架通常会预处理，从而加载速度更快。另外，对于Objective-C框架，记住使用`@import`和`#import`，而不使用 `#include` 。
 
 ```objectivec 
 // GOOD:
@@ -1331,21 +1335,29 @@ pre-compiled and can be loaded much more quickly. In addition, remember to use
 ...
 ```
 
-### Avoid Messaging the Current Object Within Initializers and `-dealloc`
+### 避免在初始化器或`-dealloc`中给当前对象发消息（Avoid Messaging the Current Object Within Initializers and `-dealloc`）
 
-Code in initializers and `-dealloc` should avoid invoking instance methods.
+> Code in initializers and `-dealloc` should avoid invoking instance methods.
 
-Superclass initialization completes before subclass initialization. Until all
-classes have had a chance to initialize their instance state any method
-invocation on self may lead to a subclass operating on uninitialized instance
-state.
+初始化器或 `-dealloc`方法中，避免调用该类对象的实例方法。
 
-A similar issue exists for `-dealloc`, where a method invocation may cause a
-class to operate on state that has been deallocated.
+> Superclass initialization completes before subclass initialization. Until all
+> classes have had a chance to initialize their instance state any method
+> invocation on self may lead to a subclass operating on uninitialized instance
+> state.
 
-One case where this is less obvious is property accessors. These can be
-overridden just like any other selector. Whenever practical, directly assign to
-and release ivars in initializers and `-dealloc`, rather than rely on accessors.
+父类的初始化方法先于子类初始化方法执行。在所有类都被初始化，使该对象的所有属性被初始化之前调用该类的示例方法，都可能导致子类直接操作未初始化的属性。
+
+> A similar issue exists for `-dealloc`, where a method invocation may cause a
+> class to operate on state that has been deallocated.
+
+ `-dealloc`方法中也存在类似问题，例如在`-dealloc`调用一些实例方法，这些方法操作的某些属性，可能早已被释放掉了。
+
+> One case where this is less obvious is property accessors. These can be
+> overridden just like any other selector. Whenever practical, directly assign to
+> and release ivars in initializers and `-dealloc`, rather than rely on accessors.
+
+属性访问是一种不太明显的案例。属性访问器可以像其他selector一样被重写。一旦切实可行，直接在初始化器和`-dealloc`方法中对成员变量进行赋值和释放，而不是通过属性访问器来完成。
 
 ```objectivec 
 // GOOD:
@@ -1359,12 +1371,17 @@ and release ivars in initializers and `-dealloc`, rather than rely on accessors.
 }
 ```
 
-Beware of factoring common initialization code into helper methods:
+> Beware of factoring common initialization code into helper methods:
+>
+> - Methods can be overridden in subclasses, either deliberately, or
+>   accidentally due to naming collisions.
+> - When editing a helper method, it may not be obvious that the code is being
+>   run from an initializer.
 
--   Methods can be overridden in subclasses, either deliberately, or
-    accidentally due to naming collisions.
--   When editing a helper method, it may not be obvious that the code is being
-    run from an initializer.
+拆解通用初始化代码为工具方法要谨慎！
+
+- 工具方法可能会有意或无意的被子类重写，或者碰巧产生了命名冲突；
+- 当编辑一个工具方法时，可能不会知晓这段代码是被初始化方法调用的；
 
 ```objectivec 
 // AVOID:
@@ -1395,17 +1412,23 @@ Beware of factoring common initialization code into helper methods:
 }
 ```
 
-### Setters copy NSStrings 
+### Setter方法中NSStrings要Copy（Setters copy NSStrings）
 
-Setters taking an `NSString` should always copy the string it accepts. This is
-often also appropriate for collections like `NSArray` and `NSDictionary`.
+> Setters taking an `NSString` should always copy the string it accepts. This is
+> often also appropriate for collections like `NSArray` and `NSDictionary`.
 
-Never just retain the string, as it may be a `NSMutableString`. This avoids the
-caller changing it under you without your knowledge.
+Setter方法中对传入的`NSString`参数必须copy一份再使用，同样，对于容器类参数，例如 `NSArray`、 `NSDictionary`，也需要copy再使用。
 
-Code receiving and holding collection objects should also consider that the
-passed collection may be mutable, and thus the collection could be more safely
-held as a copy or mutable copy of the original.
+> Never just retain the string, as it may be a `NSMutableString`. This avoids the
+> caller changing it under you without your knowledge.
+
+永远不要只考虑是string类型，也可能（传入的）是`NSMutableString`类型。这可以避免在你不知情的情况下，调用方修改该值。
+
+> Code receiving and holding collection objects should also consider that the
+> passed collection may be mutable, and thus the collection could be more safely
+> held as a copy or mutable copy of the original.
+
+持有容器对象参数也需要考虑该对象可能也是可变的，因此，使用该容器参数的复制对象，相对更安全。
 
 ```objectivec 
 // GOOD:
@@ -1418,13 +1441,17 @@ held as a copy or mutable copy of the original.
 }
 ```
 
-### Use Lightweight Generics to Document Contained Types 
+### 用泛型标识元素类型（Use Lightweight Generics to Document Contained Types）
 
-All projects compiling on Xcode 7 or newer versions should make use of the
-Objective-C lightweight generics notation to type contained objects.
+> All projects compiling on Xcode 7 or newer versions should make use of the
+> Objective-C lightweight generics notation to type contained objects.
 
-Every `NSArray`, `NSDictionary`, or `NSSet` reference should be declared using
-lightweight generics for improved type safety and to explicitly document usage.
+在Xcode7或更新版本编译的工程，应该使用Objective-C轻量级泛型符号来标识其包含的对象类别。
+
+> Every `NSArray`, `NSDictionary`, or `NSSet` reference should be declared using
+> lightweight generics for improved type safety and to explicitly document usage.
+
+`NSArray`, `NSDictionary`, 或 `NSSet`对象都需要轻量级泛型符号标明，这可以改善类型安全以及明确文档使用说明。
 
 ```objectivec 
 // GOOD:
@@ -1435,8 +1462,10 @@ lightweight generics for improved type safety and to explicitly document usage.
 NSMutableArray<MyLocation *> *mutableLocations = [otherObject.locations mutableCopy];
 ```
 
-If the fully-annotated types become complex, consider using a typedef to
-preserve readability.
+> If the fully-annotated types become complex, consider using a typedef to
+> preserve readability.
+
+若要标识的泛型比较复杂，可以考虑使用typedef定义新类型，以保持可读性。
 
 ```objectivec 
 // GOOD:
@@ -1445,9 +1474,11 @@ typedef NSSet<NSDictionary<NSString *, NSDate *> *> TimeZoneMappingSet;
 TimeZoneMappingSet *timeZoneMappings = [TimeZoneMappingSet setWithObjects:...];
 ```
 
-Use the most descriptive common superclass or protocol available. In the most
-generic case when nothing else is known, declare the collection to be explicitly
-heterogenous using id.
+> Use the most descriptive common superclass or protocol available. In the most
+> generic case when nothing else is known, declare the collection to be explicitly
+> heterogenous using id.
+
+使用最具描述性的常用父类或协议。通常情况下，当不知道容器中对象类型时，使用id显式声明。
 
 ```objectivec 
 // GOOD:
@@ -1455,27 +1486,41 @@ heterogenous using id.
 @property(nonatomic, copy) NSArray<id> *unknowns;
 ```
 
-### Avoid Throwing Exceptions 
+### 不要抛异常（Avoid Throwing Exceptions）
 
-Don't `@throw` Objective-C exceptions, but you should be prepared to catch them
-from third-party or OS calls.
+> Don't `@throw` Objective-C exceptions, but you should be prepared to catch them
+> from third-party or OS calls.
 
-This follows the recommendation to use error objects for error delivery in
-[Apple's Introduction to Exception Programming Topics for
+不要使用`@throw` 抛出Objective-C异常，但在使用第三库或系统调用时，你还必须要考虑如何捕获异常。
+
+> This follows the recommendation to use error objects for error delivery in
+> [Apple's Introduction to Exception Programming Topics for
+> Cocoa](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Exceptions/Exceptions.html).
+
+这遵循关于错误对象错误传递的推荐说明文档：[Apple's Introduction to Exception Programming Topics for
 Cocoa](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/Exceptions/Exceptions.html).
 
-We do compile with `-fobjc-exceptions` (mainly so we get `@synchronized`), but
-we don't `@throw`. Use of `@try`, `@catch`, and `@finally` are allowed when
-required to properly use 3rd party code or libraries. If you do use them, please
-document exactly which methods you expect to throw.
+> We do compile with `-fobjc-exceptions` (mainly so we get `@synchronized`), but
+> we don't `@throw`. Use of `@try`, `@catch`, and `@finally` are allowed when
+> required to properly use 3rd party code or libraries. If you do use them, please
+> document exactly which methods you expect to throw.
 
-### `nil` Checks 
+我们编译时使用编译选项`-fobjc-exceptions`（通常也用`@synchronized`），但我们不使用`@throw`。当使用第三方库或代码时， `@try`, `@catch`和 `@finally` 是被允许使用的。如果确定使用了这些关键字，请清晰明确的指明哪些方法会抛出异常。
 
-Avoid `nil` pointer checks that exist only to prevent sending messages to `nil`.
-Sending a message to `nil` [reliably
-returns](http://www.sealiesoftware.com/blog/archive/2012/2/29/objc_explain_return_value_of_message_to_nil.html)
-`nil` as a pointer, zero as an integer or floating-point value, structs
-initialized to `0`, and `_Complex` values equal to `{0, 0}`.
+### `nil`检查 （`nil` Checks）
+
+> Avoid `nil` pointer checks that exist only to prevent sending messages to `nil`.
+> Sending a message to `nil` [reliably returns](http://www.sealiesoftware.com/blog/archive/2012/2/29/objc_explain_return_value_of_message_to_nil.html)
+>
+>  `nil` as a pointer, zero as an integer or floating-point value, structs initialized to `0`, and `_Complex` values equal to `{0, 0}`.
+
+如果指针检查只是为了防止给nil对象发消息，那这部分检查不必添加。
+
+给`nil`发消息的返回值是可靠的
+
+返回值是指针时，返回nil；返回值是整数或浮点数时，返回0；返回值是结构体时，返回0；返回值是`_Complex`时，返回 `{0, 0}`。
+
+*(上面这句我也没读懂，我也不打算不懂装懂)*
 
 ```objectivec 
 // AVOID:
@@ -1491,23 +1536,31 @@ if (dataSource) {  // AVOID.
 [dataSource moveItemAtIndex:1 toIndex:0];  // GOOD.
 ```
 
-Note that this applies to `nil` as a message target, not as a parameter value.
-Individual methods may or may not safely handle `nil` parameter values.
+> Note that this applies to `nil` as a message target, not as a parameter value.
+> Individual methods may or may not safely handle `nil` parameter values.
 
-Note too that this is distinct from checking C/C++ pointers and block pointers
-against `NULL`, which the runtime does not handle and will cause your
-application to crash. You still need to make sure you do not dereference a
-`NULL` pointer.
+注意：这适用于 `nil` 作为消息接受者，而不是作为参数值。
 
-### Nullability
+个别方法可能会，也可能不会安全处理nil参数值。
 
-Interfaces can be decorated with nullability annotations to describe how the
-interface should be used and how it behaves. Use of nullability regions (e.g.,
-`NS_ASSUME_NONNULL_BEGIN` and `NS_ASSUME_NONNULL_END`) and explicit nullability
-annotations are both accepted. Prefer using the `_Nullable` and `_Nonnull`
-keywords over the `__nullable` and `__nonnull` keywords. For Objective-C methods
-and properties prefer using the context-sensitive, non-underscored keywords,
-e.g., `nonnull` and `nullable`.
+> Note too that this is distinct from checking C/C++ pointers and block pointers
+> against `NULL`, which the runtime does not handle and will cause your
+> application to crash. You still need to make sure you do not dereference a
+> `NULL` pointer.
+
+也请注意这区别于检查C/C++指针和block指针是否为`NULL`, 这些运行时不会处理，这些会导致应用崩溃。你仍然需要检查指针不能为`NULL`。
+
+### 可空性（Nullability）
+
+> Interfaces can be decorated with nullability annotations to describe how the
+> interface should be used and how it behaves. Use of nullability regions (e.g.,
+> `NS_ASSUME_NONNULL_BEGIN` and `NS_ASSUME_NONNULL_END`) and explicit nullability
+> annotations are both accepted. Prefer using the `_Nullable` and `_Nonnull`
+> keywords over the `__nullable` and `__nonnull` keywords. For Objective-C methods
+> and properties prefer using the context-sensitive, non-underscored keywords,
+> e.g., `nonnull` and `nullable`.
+
+Interface中可以使用可空性注解来描述接口行为和如何使用。使用可控性作用域（例如`NS_ASSUME_NONNULL_BEGIN` 和 `NS_ASSUME_NONNULL_END`）或使用可控性注解，这两种方式都是可以的。相对 `__nullable` 和 `__nonnull` 关键字，更推荐使用 `_Nullable`和 `_Nonnull`。对于Objective-C方法和属性，推荐使用无下划线的关键字，例如`nonnull` 和 `nullable`。
 
 ```objectivec 
 // GOOD:
@@ -1544,30 +1597,42 @@ NSArray<GTMBook *> *_Nullable GTMLoadBooksFromFile(NSString *_Nonnull path);
 NSArray<GTMBook *> *__nullable GTMLoadBooksFromTitle(NSString *__nonnull path);
 ```
 
-Be careful assuming that a pointer is not null based on a non-null qualifier
-because the compiler may not guarantee that the pointer is not null.
+> Be careful assuming that a pointer is not null based on a non-null qualifier
+> because the compiler may not guarantee that the pointer is not null.
 
-### BOOL Pitfalls 
+如果标识符标注某个指针不为空，也不要轻信，因为编译器可不能保证该指针不为空。
 
-Be careful when converting general integral values to `BOOL`. Avoid comparing
-directly with `YES`.
+### BOOL陷阱（BOOL Pitfalls）
 
-`BOOL` in OS X and in 32-bit iOS builds is defined as a signed `char`, so it may
-have values other than `YES` (`1`) and `NO` (`0`). Do not cast or convert
-general integral values directly to `BOOL`.
+> Be careful when converting general integral values to `BOOL`. Avoid comparing
+> directly with `YES`.
 
-Common mistakes include casting or converting an array's size, a pointer value,
-or the result of a bitwise logic operation to a `BOOL` that could, depending on
-the value of the last byte of the integer value, still result in a `NO` value.
-When converting a general integral value to a `BOOL`, use ternary operators to
-return a `YES` or `NO` value.
+将整型数值转换为`BOOL`要小心。避免直接和 `YES`直接进行比较。
 
-You can safely interchange and convert `BOOL`, `_Bool` and `bool` (see C++ Std
-4.7.4, 4.12 and C99 Std 6.3.1.2). Use `BOOL` in Objective-C method signatures.
+> `BOOL` in OS X and in 32-bit iOS builds is defined as a signed `char`, so it may
+> have values other than `YES` (`1`) and `NO` (`0`). Do not cast or convert
+> general integral values directly to `BOOL`.
 
-Using logical operators (`&&`, `||` and `!`) with `BOOL` is also valid and will
-return values that can be safely converted to `BOOL` without the need for a
-ternary operator.
+在OSX和32位iOS系统版本中，`BOOL` 类型被定义为有符号`char`类型，所以，它可以是除了`YES` (`1`) and `NO` (`0`)之外的其他值。切勿将整数值直接赋值或强制类型转换后赋值给`BOOL`值。
+
+> Common mistakes include casting or converting an array's size, a pointer value,
+> or the result of a bitwise logic operation to a `BOOL` that could, depending on
+> the value of the last byte of the integer value, still result in a `NO` value.
+> When converting a general integral value to a `BOOL`, use ternary operators to
+> return a `YES` or `NO` value.
+
+常见错误包括将强转或转换数组大小、指针值或者通过逻辑位运算结果赋值给`BOOL`变量，根据整数最后一个字节的值，结果仍然有可能会产生`NO`值。在将一个整数转换为`BOOL`值时，需要使用三元运算符来保证返回值是`YES` 或 `NO`。
+
+> You can safely interchange and convert `BOOL`, `_Bool` and `bool` (see C++ Std
+> 4.7.4, 4.12 and C99 Std 6.3.1.2). Use `BOOL` in Objective-C method signatures.
+
+Objective-C方法签名中使用`BOOL`，你可以安全的来转换 `BOOL`, `_Bool` and `bool`值（参考see C++ Std 4.7.4, 4.12 and C99 Std 6.3.1.2）。
+
+> Using logical operators (`&&`, `||` and `!`) with `BOOL` is also valid and will
+> return values that can be safely converted to `BOOL` without the need for a
+> ternary operator.
+
+也可以使用逻辑运算符(`&&`、 `||`、 `!`)来获取 `BOOL` 值，这种方法也可以不使用三元运算符来安全转换 `BOOL` 值。
 
 ```objectivec 
 // AVOID:
@@ -1594,9 +1659,11 @@ ternary operator.
 }
 ```
 
-Also, don't directly compare `BOOL` variables directly with `YES`. Not only is
-it harder to read for those well-versed in C, but the first point above
-demonstrates that return values may not always be what you expect.
+> Also, don't directly compare `BOOL` variables directly with `YES`. Not only is
+> it harder to read for those well-versed in C, but the first point above
+> demonstrates that return values may not always be what you expect.
+
+同样，不要将 `BOOL` 值和`YES`进行直接比较。这样做不仅仅是因为对于精通C语言的人可能难以理解，而是返回值可能并不总是和预期一致（容易引起逻辑错误），这才是真正原因。
 
 ```objectivec 
 // AVOID:
@@ -1616,10 +1683,12 @@ if (great) {         // GOOD.
 }
 ```
 
-### Interfaces Without Instance Variables 
+### 无实例变量的Interface（Interfaces Without Instance Variables）
 
-Omit the empty set of braces on interfaces that do not declare any instance
-variables.
+> Omit the empty set of braces on interfaces that do not declare any instance
+> variables.
+
+若interface不声明任何实例变量，省略空的大括号。
 
 ```objectivec 
 // GOOD:
