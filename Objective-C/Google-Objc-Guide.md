@@ -1816,33 +1816,33 @@ int CrossPlatformAPI::DoSomethingPlatformSpecific() {
 
 ### 空格 vs 制表符（Spaces vs. Tabs） 
 
-Use only spaces, and indent 2 spaces at a time. We use spaces for indentation.
-Do not use tabs in your code.
+> Use only spaces, and indent 2 spaces at a time. We use spaces for indentation.
+> Do not use tabs in your code.
 
 只使用空格，缩进量为2个空格宽度。缩进时不使用制表符，只用空格。
 
-You should set your editor to emit spaces when you hit the tab key, and to trim
-trailing spaces on lines.
+> You should set your editor to emit spaces when you hit the tab key, and to trim
+> trailing spaces on lines.
 
 设置编辑器使用空格自动替换制表符，并消除行位空格。
 
 ### 行宽（Line Length） 
 
-The maximum line length for Objective-C files is 100 columns.
+> The maximum line length for Objective-C files is 100 columns.
 
-You can make violations easier to spot by enabling *Preferences > Text Editing >
-Page guide at column: 100* in Xcode.
+> You can make violations easier to spot by enabling *Preferences > Text Editing >
+> Page guide at column: 100* in Xcode.
 
 Objective-C最大行宽为100列（100字符宽度）。在xCode中，通过设置Preferences > Text Editing > Page guide at column:为100，可以轻松检查超宽地方。
 
 ### 方法声明与定义（Method Declarations and Definitions） 
 
-One space should be used between the `-` or `+` and the return type, and no
-spacing in the parameter list except between parameters.
+> One space should be used between the `-` or `+` and the return type, and no
+> spacing in the parameter list except between parameters.
 
 `-` or `+` 后与返回值之间须有一个空格，参数名与参数类型间无空格，参数列表不同参数间有一个空格；
 
-Methods should look like this:
+> Methods should look like this:
 
 方法示例如下：
 
@@ -1854,18 +1854,20 @@ Methods should look like this:
 }
 ```
 
-The spacing before the asterisk is optional. When adding new code, be consistent
-with the surrounding file's style.
+> The spacing before the asterisk is optional. When adding new code, be consistent
+> with the surrounding file's style.
 
-星号前可以有一个空格。新添加的代码要与文件风格保持一致。
+星号前可以有一个空格。新添加的代码要与文件代码风格保持一致。
 
-If a method declaration does not fit on a single line, put each parameter on its
-own line. All lines except the first should be indented at least four spaces.
-Colons before parameters should be aligned on all lines. If the colon before the
-parameter on the first line of a method declaration is positioned such that
-colon alignment would cause indentation on a subsequent line to be less than
-four spaces, then colon alignment is only required for all lines except the
-first.
+> If a method declaration does not fit on a single line, put each parameter on its
+> own line. All lines except the first should be indented at least four spaces.
+> Colons before parameters should be aligned on all lines. If the colon before the
+> parameter on the first line of a method declaration is positioned such that
+> colon alignment would cause indentation on a subsequent line to be less than
+> four spaces, then colon alignment is only required for all lines except the
+> first.
+
+如果一个方法声明一行放不下，需要将不同参数各占一行。除首行外，其余所有行都要至少缩进4个空格。不同参数前的冒号要对齐。如果方法声明第一行中参数前的冒号所在位置，对齐所有冒号后，后面的参数前面缩进的空格数少于4个，这种情况只需要将函数声明中第一行之外的其他行冒号对齐即可。
 
 ```objectivec 
 // GOOD:
@@ -1890,12 +1892,16 @@ first.
     (id<UIAdaptivePresentationControllerDelegate>)delegate;
 ```
 
-### Function Declarations and Definitions
 
-Prefer putting the return type on the same line as the function name and append
-all parameters on the same line if they will fit. Wrap parameter lists which do
-not fit on a single line as you would wrap arguments in a [function
-call](#Function_Calls).
+
+### 方法声明与定义（Function Declarations and Definitions）
+
+> Prefer putting the return type on the same line as the function name and append
+> all parameters on the same line if they will fit. Wrap parameter lists which do
+> not fit on a single line as you would wrap arguments in a [function
+> call](#Function_Calls).
+
+将方法返回类型和方法名放于同一行，后面跟其他参数，如果一行能放下，则参数放于同一行。若一行放不下，就像函数调用一样，来包装参数列表。
 
 ```objectivec 
 // GOOD:
@@ -1912,29 +1918,46 @@ void GTMSerializeDictionaryToFileOnDispatchQueue(
 }
 ```
 
-Function declarations and definitions should also satisfy the following
-conditions:
+> Function declarations and definitions should also satisfy the following
+> conditions:
+>
+> - The opening parenthesis must always be on the same line as the function
+>   name.
+> - If you cannot fit the return type and the function name on a single line,
+>   break between them and do not indent the function name.
+> - There should never be a space before the opening parenthesis.
+> - There should never be a space between function parentheses and parameters.
+> - The open curly brace is always on the end of the last line of the function
+>   declaration, not the start of the next line.
+> - The close curly brace is either on the last line by itself or on the same
+>   line as the open curly brace.
+> - There should be a space between the close parenthesis and the open curly
+>   brace.
+> - All parameters should be aligned if possible.
+> - Function scopes should be indented 2 spaces.
+> - Wrapped parameters should have a 4 space indent.
 
-*   The opening parenthesis must always be on the same line as the function
-    name.
-*   If you cannot fit the return type and the function name on a single line,
-    break between them and do not indent the function name.
-*   There should never be a space before the opening parenthesis.
-*   There should never be a space between function parentheses and parameters.
-*   The open curly brace is always on the end of the last line of the function
-    declaration, not the start of the next line.
-*   The close curly brace is either on the last line by itself or on the same
-    line as the open curly brace.
-*   There should be a space between the close parenthesis and the open curly
-    brace.
-*   All parameters should be aligned if possible.
-*   Function scopes should be indented 2 spaces.
-*   Wrapped parameters should have a 4 space indent.
+函数声明和定义也需要满足以下条件：
+
+- 函数名后的左括号必须和函数名在同一行；
+- 若返回值类型和函数名不能放在同一行，在他们之间换行，并且不缩进函数名；
+- 函数名后的左括号前无空格；
+- 函数括号和参数间无空格；
+- 函数左大括号在函数声明后，不可另起一行；
+- 函数右大括号在函数最后独占一行，或和左大括号同一行；
+- 函数左大括号和函数参数右括号间，有一个空格；
+- 所有参数尽量对齐（冒号对齐）；
+- 函数作用域缩进2个空格；
+- 封装参数缩进4个空格；
+
+
 
 ### 条件判断（Conditionals） 
 
-Include a space after `if`, `while`, `for`, and `switch`, and around comparison
-operators.
+> Include a space after `if`, `while`, `for`, and `switch`, and around comparison
+> operators.
+
+ `if`, `while`, `for`,  `switch`后有一个空格，比较运算符两边有空格。
 
 ```objectivec 
 // GOOD:
@@ -1945,8 +1968,10 @@ for (int i = 0; i < 5; ++i) {
 while (test) {};
 ```
 
-Braces may be omitted when a loop body or conditional statement fits on a single
-line.
+> Braces may be omitted when a loop body or conditional statement fits on a single
+> line.
+
+若循环体或条件语句可放置一行中时，可以省略大括号；
 
 ```objectivec 
 // GOOD:
@@ -1968,7 +1993,9 @@ for (int i = 0; i < 10; i++)
   BlowTheHorn();                // AVOID.
 ```
 
-If an `if` clause has an `else` clause, both clauses should use braces.
+> If an `if` clause has an `else` clause, both clauses should use braces.
+
+若 `if` 语句后有 `else` 语句，两部分都需要使用大括号。
 
 ```objectivec 
 // GOOD:
@@ -1991,8 +2018,10 @@ if (hasBaz) {
 } else bar();      // AVOID.
 ```
 
-Intentional fall-through to the next case should be documented with a comment
-unless the case has no intervening code before the next case.
+> Intentional fall-through to the next case should be documented with a comment
+> unless the case has no intervening code before the next case.
+
+除非两个case语句之间没有其他代码，有意添加的case连续执行情况，需要增加注释说明。
 
 ```objectivec 
 // GOOD:
@@ -2015,10 +2044,12 @@ switch (i) {
 }
 ```
 
-### Expressions 
+### 表达式（Expressions）
 
-Use a space around binary operators and assignments. Omit a space for a unary
-operator. Do not add spaces inside parentheses.
+> Use a space around binary operators and assignments. Omit a space for a unary
+> operator. Do not add spaces inside parentheses.
+
+二进制运算符、赋值运算符左右两边都需要添加空格。一元运算符可以省略空格。圆括号（左括号右边、右括号左边）不用空格。
 
 ```objectivec 
 // GOOD:
@@ -2028,7 +2059,9 @@ v = w * x + y / z;
 v = -y * (x + z);
 ```
 
-Factors in an expression may omit spaces.
+> Factors in an expression may omit spaces.
+
+某些表达式运算符左右可能省略空格。
 
 ```objectivec 
 // GOOD:
@@ -2036,7 +2069,7 @@ Factors in an expression may omit spaces.
 v = w*x + y/z;
 ```
 
-### Method Invocations 
+### 方法调动（Method Invocations）
 
 Method invocations should be formatted much like method declarations.
 
