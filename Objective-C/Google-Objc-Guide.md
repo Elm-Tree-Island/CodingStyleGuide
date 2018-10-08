@@ -1740,20 +1740,24 @@ Block指针不可使用弱引用。为避免在客户端代码中出现循环引
 
 ## Objective-C++ 
 
-### Style Matches the Language 
+### 代码风格与所用语言保持一致（Style Matches the Language）
 
 > Within an Objective-C++ source file, follow the style for the language of the
 > function or method you're implementing. In order to minimize clashes between the
 > differing naming styles when mixing Cocoa/Objective-C and C++, follow the style
 > of the method being implemented.
 
-对于Objective-C++源码文件，遵守函数或方法实现语言的编码规范。为了将Cocoa/Objective-C、C++不同语言混合使用导致的命名风格冲突最小化，遵守源码中方法的实现使用的编码风格。
+对于Objective-C++源码文件，遵守函数或方法实现语言的编码规范。为了将Cocoa/Objective-C、C++不同语言混合使用导致的命名风格冲突最小化，遵守源码中方法实现使用的编码风格。
 
-For code in an `@implementation` block, use the Objective-C naming rules. For
-code in a method of a C++ class, use the C++ naming rules.
+> For code in an `@implementation` block, use the Objective-C naming rules. For
+> code in a method of a C++ class, use the C++ naming rules.
 
-For code in an Objective-C++ file outside of a class implementation, be
-consistent within the file.
+对于 `@implementation`代码，使用Objective-C命名规范。对于C++类中方法代码，使用C++命名规范。
+
+> For code in an Objective-C++ file outside of a class implementation, be
+> consistent within the file.
+
+对于Objective-C++文件类实现部分之外的代码，与该文件代码风格保持一致。
 
 ```objectivec++ 
 // GOOD:
@@ -1801,8 +1805,10 @@ int CrossPlatformAPI::DoSomethingPlatformSpecific() {
 }
 ```
 
-Projects may opt to use an 80 column line length limit for consistency with
-Google's C++ style guide.
+> Projects may opt to use an 80 column line length limit for consistency with
+> Google's C++ style guide.
+
+工程中可能选择使用80个字符列宽限制，以便和Google的C++代码规范保持一致。
 
 
 
