@@ -484,10 +484,10 @@ NSEnumerator *enumerator = [frogs reverseObjectEnumerator];  // GOOD.
 NSEnumerator *enumerator = frogs.reverseObjectEnumerator;    // AVOID.
 ```
 
-See [Apple's Guide to Naming Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF) for more details on Objective-C naming.
-
-These guidelines are for Objective-C methods only. C++ method names continue to
-follow the rules set in the C++ style guide.
+> See [Apple's Guide to Naming Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF) for more details on Objective-C naming.
+>
+> These guidelines are for Objective-C methods only. C++ method names continue to
+> follow the rules set in the C++ style guide.
 
 更多命名相关内容，参考[Apple's Guide to Naming Methods](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingMethods.html#//apple_ref/doc/uid/20001282-BCIGIJJF)。
 
@@ -495,8 +495,8 @@ follow the rules set in the C++ style guide.
 
 ### 函数命名（Function Names）
 
-Function names should start with a capital letter and have a capital letter for
-each new word (a.k.a. "[camel case](https://en.wikipedia.org/wiki/Camel_case)" or "Pascal case").
+> Function names should start with a capital letter and have a capital letter for
+> each new word (a.k.a. "[camel case](https://en.wikipedia.org/wiki/Camel_case)" or "Pascal case").
 
 函数名要首字母大写，之后使用驼峰命名法。
 
@@ -507,8 +507,8 @@ static void AddTableEntry(NSString *tableEntry);
 static BOOL DeleteFile(const char *filename);
 ```
 
-Because Objective-C does not provide namespacing, non-static functions should
-have a [prefix](#prefixes) that minimizes the chance of a name collision.
+> Because Objective-C does not provide namespacing, non-static functions should
+> have a [prefix](#prefixes) that minimizes the chance of a name collision.
 
 由于Objective-C不支持命名空间，非静态函数要使用前缀，以最大程度减少命名冲突。
 
