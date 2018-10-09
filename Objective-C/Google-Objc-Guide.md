@@ -564,7 +564,7 @@ static int gGlobalCounter;
 > Consistency of prefix or suffix underscores should be maintained within each
 > class.
 
-提示：Google之前对Objective-C变量的约定是使用尾部下划线。现有工程中，后续开发可能会选择继续使用实例变量尾部带有下划线的方式，以便与之前工程代码保持一致。在每个类中要保持前后缀下划线的一致性。
+注意：Google之前对Objective-C变量的约定是使用尾部下划线。现有工程中，后续开发可能会选择继续使用实例变量尾部带有下划线的方式，以便与之前工程代码保持一致。在每个类中要保持前后缀下划线的一致性。
 
 #### 常量（Constants）
 
@@ -1486,7 +1486,7 @@ TimeZoneMappingSet *timeZoneMappings = [TimeZoneMappingSet setWithObjects:...];
 @property(nonatomic, copy) NSArray<id> *unknowns;
 ```
 
-### 不要抛异常（Avoid Throwing Exceptions）
+### 避免抛异常（Avoid Throwing Exceptions）
 
 > Don't `@throw` Objective-C exceptions, but you should be prepared to catch them
 > from third-party or OS calls.
@@ -2071,10 +2071,14 @@ v = w*x + y/z;
 
 ### 方法调动（Method Invocations）
 
-Method invocations should be formatted much like method declarations.
+> Method invocations should be formatted much like method declarations.
 
-When there's a choice of formatting styles, follow the convention already used
-in a given source file. Invocations should have all arguments on one line:
+方法调用的格式应与方法声明一致。
+
+> When there's a choice of formatting styles, follow the convention already used
+> in a given source file. Invocations should have all arguments on one line:
+
+若源码中有现有的编码规范使用惯例，请保持一致继续使用。方法调用的所有参数都放在一行。
 
 ```objectivec 
 // GOOD:
@@ -2082,7 +2086,9 @@ in a given source file. Invocations should have all arguments on one line:
 [myObject doFooWith:arg1 name:arg2 error:arg3];
 ```
 
-or have one argument per line, with colons aligned:
+> or have one argument per line, with colons aligned:
+
+或每个参数放在单独一行，冒号对齐。
 
 ```objectivec 
 // GOOD:
@@ -2092,7 +2098,9 @@ or have one argument per line, with colons aligned:
               error:arg3];
 ```
 
-Don't use any of these styles:
+> Don't use any of these styles:
+
+不要使用下列编码风格：
 
 ```objectivec 
 // AVOID:
@@ -2108,9 +2116,11 @@ Don't use any of these styles:
           error:arg3];
 ```
 
-As with declarations and definitions, when the first keyword is shorter than the
-others, indent the later lines by at least four spaces, maintaining colon
-alignment:
+> As with declarations and definitions, when the first keyword is shorter than the
+> others, indent the later lines by at least four spaces, maintaining colon
+> alignment:
+
+与声明和定义一样，当第一个关键字比其他字段短，将后面的参数缩进至少4个空格，并将冒号对齐。
 
 ```objectivec 
 // GOOD:
@@ -2121,16 +2131,24 @@ alignment:
                 error:arg4];
 ```
 
-Invocations containing multiple inlined blocks may have their parameter names
-left-aligned at a four space indent.
+> Invocations containing multiple inlined blocks may have their parameter names
+> left-aligned at a four space indent.
 
-### Function Calls 
+方法调用包含多个内嵌block时，将这些参数缩进4个空格，并左对齐。
 
-Function calls should include as many parameters as fit on each line, except
-where shorter lines are needed for clarity or documentation of the parameters.
 
-Continuation lines for function parameters may be indented to align with the
-opening parenthesis, or may have a four-space indent.
+
+### 函数调用（Function Calls）
+
+> Function calls should include as many parameters as fit on each line, except
+> where shorter lines are needed for clarity or documentation of the parameters.
+
+函数调用要尽可能多的将参数填满每一行，如果某些参数需要说明参数含义或添加文档说明，将这行参数不填满整行。
+
+> Continuation lines for function parameters may be indented to align with the
+> opening parenthesis, or may have a four-space indent.
+
+换行后的参数需要与函数的左括号对齐，或者使用4个空格进行缩进。
 
 ```objectivec 
 // GOOD:
@@ -2150,24 +2168,33 @@ TransformImage(image,
                z1, z2, z3);
 ```
 
-Use local variables with descriptive names to shorten function calls and reduce
-nesting of calls.
+> Use local variables with descriptive names to shorten function calls and reduce
+> nesting of calls.
+
+使用具有描述性名称的局部变量来缩短函数调用和减少内嵌调用。
 
 ```objectivec 
 // GOOD:
 
 double scoreHeuristic = scores[x] * y + bases[x];
 UpdateTally(scoreHeuristic, x, y, z);
+
+// AVOID
+UpdateTally((scores[x] * y + bases[x]), x, y, z);
 ```
 
-### Exceptions 
 
-Format exceptions with `@catch` and `@finally` labels on the same line as the
-preceding `}`. Add a space between the `@` label and the opening brace (`{`), as
-well as between the `@catch` and the caught object declaration. If you must use
-Objective-C exceptions, format them as follows. However, see [Avoid Throwing
-Exceptions](#Avoid_Throwing_Exceptions) for reasons why you should not be using
-exceptions.
+
+### 异常（Exceptions）
+
+> Format exceptions with `@catch` and `@finally` labels on the same line as the
+> preceding `}`. Add a space between the `@` label and the opening brace (`{`), as
+> well as between the `@catch` and the caught object declaration. If you must use
+> Objective-C exceptions, format them as follows. However, see [Avoid Throwing
+> Exceptions](#Avoid_Throwing_Exceptions) for reasons why you should not be using
+> exceptions.
+
+使用 `@catch` 和 `@finally` 标签要与左大括号在同一行。标签与左大括号之间添加一个空格， `@catch` 与异常对象声明之间也添加一个空格。如果必须使用Objective-C异常类型，请按下面方式进行格式化。但是，请参考[避免抛异常（Avoid Throwing Exceptions）](#避免抛异常（Avoid Throwing Exceptions）) 以便了解避免抛出异常的原因。
 
 ```objectivec 
 // GOOD:
@@ -2181,44 +2208,70 @@ exceptions.
 }
 ```
 
-### Function Length 
 
-Prefer small and focused functions.
 
-Long functions and methods are occasionally appropriate, so no hard limit is
-placed on function length. If a function exceeds about 40 lines, think about
-whether it can be broken up without harming the structure of the program.
+### 函数长度（Function Length）
 
-Even if your long function works perfectly now, someone modifying it in a few
-months may add new behavior. This could result in bugs that are hard to find.
-Keeping your functions short and simple makes it easier for other people to read
-and modify your code.
+> Prefer small and focused functions.
 
-When updating legacy code, consider also breaking long functions into smaller
-and more manageable pieces.
+推荐小而功能专注的函数。
 
-### Vertical Whitespace 
+> Long functions and methods are occasionally appropriate, so no hard limit is
+> placed on function length. If a function exceeds about 40 lines, think about
+> whether it can be broken up without harming the structure of the program.
 
-Use vertical whitespace sparingly.
+长方法或者函数某些情况下也是可以的，所以关于函数长度没有固定的限制。如果一个函数长度超过了40个字符，请考虑如何在不破坏代码结构的基础上，将它拆分。
 
-To allow more code to be easily viewed on a screen, avoid putting blank lines
-just inside the braces of functions.
+> Even if your long function works perfectly now, someone modifying it in a few
+> months may add new behavior. This could result in bugs that are hard to find.
+> Keeping your functions short and simple makes it easier for other people to read
+> and modify your code.
 
-Limit blank lines to one or two between functions and between logical groups of
-code.
+即便你现在的长方法可以完美运行，可能几个月后的某些修改会给他添加新特性。这也导致出现问题难以发现。保持函数简练可以使代码易读，利于修改。
 
-## Objective-C Style Exceptions 
+> When updating legacy code, consider also breaking long functions into smaller
+> and more manageable pieces.
 
-### Indicating style exceptions 
+当更新遗留代码时，也需要考虑将长函数分解成更小更利于管理维护的部分。
 
-Lines of code that are not expected to adhere to these style recommendations
-require `// NOLINT` at the end of the line or `// NOLINTNEXTLINE` at the end of
-the previous line. Sometimes it is required that parts of Objective-C code must
-ignore these style recommendations (for example code may be machine generated or
-code constructs are such that its not possible to style correctly).
 
-A `// NOLINT` comment on that line or `// NOLINTNEXTLINE` on the previous line
-can be used to indicate to the reader that code is intentionally ignoring style
-guidelines. In addition these annotations can also be picked up by automated
-tools such as linters and handle code correctly. Note that there is a single
-space between `//` and `NOLINT*`.
+
+### 垂直空白（Vertical Whitespace）
+
+> Use vertical whitespace sparingly.
+
+谨慎使用垂直空白。
+
+> To allow more code to be easily viewed on a screen, avoid putting blank lines
+> just inside the braces of functions.
+
+为了让更多代码能够一屏展示，在函数大括号内，避免使用空行。
+
+> Limit blank lines to one or two between functions and between logical groups of
+> code.
+
+不同函数间或不同代码逻辑组之间，空行限制在1-2行。
+
+
+
+## Objective-C风格异常（Objective-C Style Exceptions）
+
+### 指明风格异常（Indicating style exceptions）
+
+> Lines of code that are not expected to adhere to these style recommendations
+> require `// NOLINT` at the end of the line or `// NOLINTNEXTLINE` at the end of
+> the previous line. Sometimes it is required that parts of Objective-C code must
+> ignore these style recommendations (for example code may be machine generated or
+> code constructs are such that its not possible to style correctly).
+
+预计不符合这些规范的代码行，需要在行尾添加`// NOLINT`或者在前一行添加 `// NOLINTNEXTLINE` 标识。有时一部分代码需要忽略某些推荐的编码风格规范（例如某些机器生成的代码或者某些结构是不可能设置为正式样式的代码）。
+
+> A `// NOLINT` comment on that line or `// NOLINTNEXTLINE` on the previous line
+> can be used to indicate to the reader that code is intentionally ignoring style
+> guidelines. In addition these annotations can also be picked up by automated
+> tools such as linters and handle code correctly. Note that there is a single
+> space between `//` and `NOLINT*`.
+
+一行中的 `// NOLINT` 标注和前一行的 `// NOLINTNEXTLINE` 标注可以被用来告诉读者，某些代码是故意忽略遵守使用编码规范的，此外，这些标注也可以让一些自动化工具（如linters）正确处理代码。
+
+注意 `//` 和 `NOLINT*`之间有一个空格。
