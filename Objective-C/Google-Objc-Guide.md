@@ -193,14 +193,14 @@
 > Names should be as descriptive as possible, within reason. Follow standard
 > [Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
-命名需要自达意（即看到命名，即可清楚知道代表的意义）且合理，参照[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
+命名需要合理而且能够自身描述其含义，参照[Objective-C naming rules](https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html).
 
 > Avoid non-standard abbreviations (including non-standard acronyms and
 > initialisms). Don't worry about saving horizontal space as it is far more
 > important to make your code immediately understandable by a new reader. For
 > example:
 
-禁用非标准缩写（包括非标准首字母缩略词）。 相对节约横向空间来说，对于一个新的读者来说，能够立即理解意义会更为重要，例如：
+避免使用非标准缩写（包括非标准首字母缩略词）。 相对节约横向空间来说，对于一个新的读者来说，能够立即理解意义会更为重要，例如：
 
 ```objectivec 
 // GOOD:
