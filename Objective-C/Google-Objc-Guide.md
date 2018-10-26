@@ -68,7 +68,7 @@
 
 与上面说的保持一致性一样，与苹果Objective-C SDKs保持一致性同样具有价值。如果一个Objective-C的功能特性解决了一个由于参数使用导致的问题。然而，有时语言的特性和惯用语法是有缺陷的，或者本来就被设计的不是通用的。此时，避免或者禁用这些特性或惯用语法往往更好。
 
-### 风格规范要适度（Style rules(编码规范) should pull their weight）
+### 风格规范要适度（Style rules should pull their weight）
 
 > The benefit of a style rule must be large enough to justify asking engineers to
 > remember it. The benefit is measured relative to the codebase we would get
@@ -78,7 +78,7 @@
 > contravenes many of the following principles, but is not discussed due to its
 > extreme rarity.
 
-编码规范必须被证明足够有益，以便让工程师信服。这些收益是相对于我们拿一个完全没有规范的代码库来对比的，若工程师执行一个非常糟糕的编码规范，也比完全没有规范好一些。这一原则主要解释我们没有的规则，而不是我们已有的规则。例如，goto违反很多下述原则，但我们由于其极其少见，我们在此不讨论。
+编码规范必须被证明足够有益，以便让工程师信服。这些收益是相对于我们拿一个完全没有规范的代码库来对比的，若工程师执行一个非常糟糕的编码规范，也比完全没有规范好一些。这一准则主要解释我们没有的规则，而不是我们已有的。例如，goto违反很多下述原则，但由于其极其少见，我们在此不讨论。
 
 ## 示例 (Example) 
 
