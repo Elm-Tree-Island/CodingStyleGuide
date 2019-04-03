@@ -1090,7 +1090,7 @@ strong和weak声明示例
 > of variables that are later used outside of the macro. Macros shouldn't make
 > code hard to understand by hiding where and how a variable is declared.
 
-避免使用生成方法实现的宏（比如生成单例方法的宏等）或者可生成变量声明，且该变量在宏外使用的宏。宏不能隐藏变量在何处以及如何被声明，这会导致代码晦涩难懂。
+避免使用生成方法实现的宏（比如生成单例方法的宏等）或者可生成变量声明，且该变量在宏外使用的宏。宏不该通过隐藏变量声明，让代码晦涩难懂。
 
 ```objectivec 
 // AVOID:
@@ -2069,7 +2069,7 @@ v = -y * (x + z);
 v = w*x + y/z;
 ```
 
-### 方法调动（Method Invocations）
+### 方法调用（Method Invocations）
 
 > Method invocations should be formatted much like method declarations.
 
